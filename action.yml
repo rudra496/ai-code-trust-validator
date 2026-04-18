@@ -60,24 +60,60 @@ runs:
     - name: Install AI Trust Validator
       shell: bash
       run: |
-        pip install ai-trust-validator || pip install git+https://github.com/rudra496/ai-code-trust-validator.git
+        pip install -e ${{ github.action_path }} 2>/dev/null || \
+          pip install ai-trust-validator 2>/dev/null || \
+          pip install git+https://github.com/rudra496/ai-code-trust-validator.git
     
     - name: Run Validation
       id: validate
       shell: bash
       run: |
-        # Run validation
-        aitrust validate ${{ inputs.path }} \
-          --min-score ${{ inputs.min-score }} \
-          ${{ inputs.strict == 'true' && '--strict' || '' }} \
-          ${{ inputs.format == 'json' && '--json' || '' }} \
-          > ${{ inputs.output-file }} 2>&1 || true
+        set +e
         
-        # Extract metrics
-        SCORE=$(cat ${{ inputs.output-file }} | grep -oP 'Trust Score: \K\d+' || echo "0")
-        CRITICAL=$(cat ${{ inputs.output-file }} | grep -oP 'Critical Issues: \K\d+' || echo "0")
+        # Build flags
+        FLAGS="--min-score ${{ inputs.min-score }}"
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          FLAGS="$FLAGS --strict"
+        fi
         
-        # Check if passed
+        # Run validation with JSON output for parsing
+        aitrust validate ${{ inputs.path }} $FLAGS --json \
+          > ${{ inputs.output-file }} 2>&1
+        EXIT_CODE=$?
+        
+        # Also show human-readable output
+        aitrust validate ${{ inputs.path }} $FLAGS || true
+        
+        # Extract metrics from JSON output
+        if command -v python3 &>/dev/null; then
+          SCORE=$(python3 -c "
+        import json, sys
+        try:
+            data = json.load(open('${{ inputs.output-file }}'))
+            if isinstance(data, list):
+                scores = [r.get('trust_score', 0) for r in data]
+                print(int(sum(scores)/len(scores)) if scores else 0)
+            else:
+                print(data.get('trust_score', 0))
+        except:
+            print(0)
+        " 2>/dev/null || echo "0")
+          CRITICAL=$(python3 -c "
+        import json, sys
+        try:
+            data = json.load(open('${{ inputs.output-file }}'))
+            items = data if isinstance(data, list) else [data]
+            count = sum(len([i for i in r.get('critical_issues', []) if isinstance(i, dict)]) for r in items)
+            print(count)
+        except:
+            print(0)
+        " 2>/dev/null || echo "0")
+        else
+          SCORE="0"
+          CRITICAL="0"
+        fi
+        
+        # Determine pass/fail
         if [ "$SCORE" -ge "${{ inputs.min-score }}" ] && [ "$CRITICAL" -eq 0 ]; then
           PASSED="true"
         else
@@ -89,11 +125,15 @@ runs:
         echo "passed=$PASSED" >> $GITHUB_OUTPUT
         echo "report=${{ inputs.output-file }}" >> $GITHUB_OUTPUT
         
-        # Show results
-        cat ${{ inputs.output-file }}
+        echo ""
+        echo "📊 Trust Score: $SCORE/100"
+        echo "🚨 Critical Issues: $CRITICAL"
+        echo "✅ Passed: $PASSED"
         
-        # Fail if needed
-        if [ "${{ inputs.fail-on-low }}" == "true" ] && [ "$PASSED" == "false" ]; then
+        # Fail if configured
+        if [ "${{ inputs.fail-on-low }}" = "true" ] && [ "$PASSED" = "false" ]; then
+          echo ""
+          echo "❌ Validation failed: score $SCORE < ${{ inputs.min-score }} or $CRITICAL critical issues found"
           exit 1
         fi
     
