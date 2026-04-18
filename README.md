@@ -22,7 +22,7 @@
 
 ## 🎯 The Problem
 
-**84% of developers use AI coding tools. Only 29% trust the output.** *(Stack Overflow 2025)*
+**84% of developers use AI coding tools. Only 29% trust the output.** Studies show most developers use AI coding tools but few fully trust the output.
 
 AI writes code fast, but that code often contains:
 - 🔓 **Security vulnerabilities** — SQL injection, hardcoded secrets, command injection
@@ -48,7 +48,7 @@ AI writes code fast, but that code often contains:
 | **🌐 API** | REST API server, OpenAPI docs, Batch validation, Webhook support |
 | **👀 Monitoring** | File watch mode, Live dashboard, Continuous validation |
 | **📦 Multi-file** | Dependency analysis, Circular dependency detection, Import validation |
-| **⚡ Performance** | Intelligent caching, Incremental analysis, ~10,000+ lines/sec |
+| **⚡ Performance** | Intelligent caching, Incremental analysis, Fast analysis with intelligent caching |
 | **🔌 Extensible** | Plugin system, Custom analyzers, Hook system |
 | **🐳 Deployment** | Docker, Docker Compose, GitHub Action, Pre-commit hooks |
 | **💻 IDE Integration** | VS Code extension, JetBrains plugin, LSP server |
@@ -471,7 +471,7 @@ manager.register(MyCustomAnalyzer())
 
 | Metric | Value |
 |--------|-------|
-| Throughput | 10,000+ lines/sec |
+| Throughput | Fast analysis with intelligent caching |
 | Avg validation | 5-20ms per file |
 | Memory | <50MB typical |
 | Cache hit rate | 95%+ on re-runs |
