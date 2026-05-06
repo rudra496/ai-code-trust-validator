@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" rx="12" fill="#0f172a"/>
+  <!-- Title bar -->
+  <rect width="800" height="40" rx="12" fill="#1e293b"/>
+  <rect y="28" width="800" height="12" fill="#1e293b"/>
+  <circle cx="24" cy="20" r="7" fill="#ef4444"/>
+  <circle cx="48" cy="20" r="7" fill="#eab308"/>
+  <circle cx="72" cy="20" r="7" fill="#22c55e"/>
+  <text x="400" y="25" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="13">Terminal — aitrust validate generated_code.py</text>
+  <!-- Output -->
+  <text x="40" y="80" fill="#6366f1" font-family="monospace" font-size="14">🔍 Analyzing: generated_code.py</text>
+  <line x1="40" y1="95" x2="760" y2="95" stroke="#334155" stroke-width="1"/>
+  <text x="40" y="130" fill="#e2e8f0" font-family="monospace" font-size="15" font-weight="bold">📊 TRUST SCORE: 67/100 ⚠️</text>
+  <!-- Table -->
+  <rect x="40" y="155" width="720" height="120" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="60" y="185" fill="#94a3b8" font-family="monospace" font-size="13">Category</text>
+  <text x="250" y="185" fill="#94a3b8" font-family="monospace" font-size="13">Score</text>
+  <text x="420" y="185" fill="#94a3b8" font-family="monospace" font-size="13">Issues</text>
+  <line x1="55" y1="195" x2="745" y2="195" stroke="#334155"/>
+  <text x="60" y="220" fill="#e2e8f0" font-family="monospace" font-size="13">Security</text>
+  <text x="250" y="220" fill="#eab308" font-family="monospace" font-size="13">72</text>
+  <text x="420" y="220" fill="#94a3b8" font-family="monospace" font-size="12">2 medium, 1 low</text>
+  <text x="60" y="245" fill="#e2e8f0" font-family="monospace" font-size="13">Hallucinations</text>
+  <text x="250" y="245" fill="#ef4444" font-family="monospace" font-size="13">45</text>
+  <text x="420" y="245" fill="#ef4444" font-family="monospace" font-size="12">3 critical</text>
+  <text x="60" y="270" fill="#e2e8f0" font-family="monospace" font-size="13">Logic</text>
+  <text x="250" y="270" fill="#22c55e" font-family="monospace" font-size="13">85</text>
+  <text x="420" y="270" fill="#94a3b8" font-family="monospace" font-size="12">1 minor</text>
+  <!-- Critical issues -->
+  <text x="40" y="315" fill="#ef4444" font-family="monospace" font-size="13">🚨 Critical Issues:</text>
+  <text x="60" y="340" fill="#fca5a5" font-family="monospace" font-size="12">[HALLUCINATION] Line 12: Import 'fancy_lib' does not exist</text>
+  <text x="60" y="360" fill="#fca5a5" font-family="monospace" font-size="12">[HALLUCINATION] Line 18: Function 'quick_sort_v2' not defined</text>
+  <text x="60" y="380" fill="#fca5a5" font-family="monospace" font-size="12">[SECURITY]     Line 24: Potential SQL injection via f-string</text>
+  <!-- Suggestions -->
+  <text x="40" y="420" fill="#6366f1" font-family="monospace" font-size="13">💡 AI Suggestions:</text>
+  <text x="60" y="445" fill="#a5b4fc" font-family="monospace" font-size="12">→ Replace 'fancy_lib' with 'numpy' or 'pandas'</text>
+  <text x="60" y="465" fill="#a5b4fc" font-family="monospace" font-size="12">→ Use parameterized queries: cursor.execute("... WHERE id = ?", (user_id,))</text>
+</svg>

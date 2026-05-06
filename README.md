@@ -375,22 +375,22 @@ aitrust lsp
 
 ### CLI Validation
 <p align="center">
-  <img src="docs/images/cli-demo.png" alt="CLI validation output" width="700">
+  <img src="docs/images/cli-demo.svg" alt="CLI validation output" width="700">
 </p>
 
 ### Web Dashboard
 <p align="center">
-  <img src="docs/images/dashboard-demo.png" alt="Web dashboard" width="700">
+  <img src="docs/images/dashboard-demo.svg" alt="Web dashboard" width="700">
 </p>
 
 ### VS Code Extension
 <p align="center">
-  <img src="docs/images/vscode-demo.png" alt="VS Code extension" width="700">
+  <img src="docs/images/vscode-demo.svg" alt="VS Code extension" width="700">
 </p>
 
 ### JetBrains Plugin
 <p align="center">
-  <img src="docs/images/jetbrains-demo.png" alt="JetBrains plugin" width="700">
+  <img src="docs/images/jetbrains-demo.svg" alt="JetBrains plugin" width="700">
 </p>
 
 ---

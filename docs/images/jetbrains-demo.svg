@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" rx="12" fill="#2b2b2b"/>
+  <!-- Title bar -->
+  <rect width="800" height="32" rx="12" fill="#3c3f41"/>
+  <rect y="20" width="800" height="12" fill="#3c3f41"/>
+  <text x="200" y="22" fill="#bbbbbb" font-family="sans-serif" font-size="11">generated_code.py — AI Trust Validator — PyCharm</text>
+  <!-- Sidebar -->
+  <rect y="32" width="40" height="448" fill="#3c3f41"/>
+  <text x="20" y="60" text-anchor="middle" fill="#bbbbbb" font-size="14">📄</text>
+  <text x="20" y="85" text-anchor="middle" fill="#bbbbbb" font-size="14">📦</text>
+  <text x="20" y="110" text-anchor="middle" fill="#bbbbbb" font-size="14">🔍</text>
+  <text x="20" y="135" text-anchor="middle" fill="#6366f1" font-size="14">🛡️</text>
+  <!-- Project panel -->
+  <rect x="40" y="32" width="160" height="448" fill="#313335"/>
+  <text x="52" y="52" fill="#bbbbbb" font-family="sans-serif" font-size="10" font-weight="bold">PROJECT</text>
+  <text x="52" y="72" fill="#a9b7c6" font-family="sans-serif" font-size="10">▼ src/</text>
+  <text x="64" y="90" fill="#cc7832" font-family="monospace" font-size="10">generated_code.py</text>
+  <text x="64" y="108" fill="#a9b7c6" font-family="monospace" font-size="10">app.js</text>
+  <text x="64" y="126" fill="#a9b7c6" font-family="monospace" font-size="10">utils.ts</text>
+  <!-- Code area -->
+  <rect x="200" y="32" width="380" height="448" fill="#2b2b2b"/>
+  <!-- Line numbers -->
+  <text x="210" y="56" fill="#606366" font-family="monospace" font-size="11">1</text>
+  <text x="210" y="72" fill="#606366" font-family="monospace" font-size="11">2</text>
+  <text x="210" y="88" fill="#606366" font-family="monospace" font-size="11">3</text>
+  <text x="210" y="104" fill="#606366" font-family="monospace" font-size="11">4</text>
+  <text x="210" y="120" fill="#606366" font-family="monospace" font-size="11">5</text>
+  <text x="210" y="136" fill="#606366" font-family="monospace" font-size="11">6</text>
+  <text x="210" y="152" fill="#606366" font-family="monospace" font-size="11">7</text>
+  <text x="210" y="168" fill="#606366" font-family="monospace" font-size="11">8</text>
+  <text x="210" y="184" fill="#606366" font-family="monospace" font-size="11">9</text>
+  <text x="204" y="200" fill="#606366" font-family="monospace" font-size="11">10</text>
+  <text x="204" y="216" fill="#606366" font-family="monospace" font-size="11">11</text>
+  <text x="204" y="232" fill="#606366" font-family="monospace" font-size="11">12</text>
+  <text x="204" y="248" fill="#606366" font-family="monospace" font-size="11">13</text>
+  <text x="204" y="264" fill="#606366" font-family="monospace" font-size="11">14</text>
+  <!-- Code -->
+  <text x="232" y="56" fill="#cc7832" font-family="monospace" font-size="11">import</text>
+  <text x="278" y="56" fill="#a9b7c6" font-family="monospace" font-size="11">os</text>
+  <text x="232" y="72" fill="#cc7832" font-family="monospace" font-size="11">import</text>
+  <text x="278" y="72" fill="#a9b7c6" font-family="monospace" font-size="11">fancy_lib</text>
+  <text x="232" y="88" fill="#cc7832" font-family="monospace" font-size="11">import</text>
+  <text x="278" y="88" fill="#a9b7c6" font-family="monospace" font-size="11">requests</text>
+  <text x="232" y="120" fill="#cc7832" font-family="monospace" font-size="11">def</text>
+  <text x="258" y="120" fill="#ffc66d" font-family="monospace" font-size="11">get_user</text>
+  <text x="326" y="120" fill="#a9b7c6" font-family="monospace" font-size="11">(user_id):</text>
+  <text x="246" y="152" fill="#a9b7c6" font-family="monospace" font-size="11">api_key =</text>
+  <text x="310" y="152" fill="#6a8759" font-family="monospace" font-size="11">"sk-abc123secret"</text>
+  <text x="246" y="184" fill="#a9b7c6" font-family="monospace" font-size="11">query =</text>
+  <text x="300" y="184" fill="#6a8759" font-family="monospace" font-size="11">f"SELECT * FROM users WHERE id={user_id}"</text>
+  <text x="246" y="216" fill="#a9b7c6" font-family="monospace" font-size="11">result =</text>
+  <text x="308" y="216" fill="#ffc66d" font-family="monospace" font-size="11">quick_sort_v2</text>
+  <text x="406" y="216" fill="#a9b7c6" font-family="monospace" font-size="11">(data)</text>
+  <!-- Inline annotations -->
+  <rect x="275" y="62" width="120" height="18" rx="3" fill="#ef4444" opacity="0.15"/>
+  <text x="279" y="75" fill="#ef4444" font-family="sans-serif" font-size="9">⚠ Module not found</text>
+  <rect x="300" y="142" width="175" height="18" rx="3" fill="#ef4444" opacity="0.15"/>
+  <text x="304" y="155" fill="#ef4444" font-family="sans-serif" font-size="9">⚠ Hardcoded secret detected</text>
+  <rect x="300" y="174" width="155" height="18" rx="3" fill="#ef4444" opacity="0.15"/>
+  <text x="304" y="187" fill="#ef4444" font-family="sans-serif" font-size="9">⚠ SQL injection risk</text>
+  <rect x="305" y="206" width="130" height="18" rx="3" fill="#ef4444" opacity="0.15"/>
+  <text x="309" y="219" fill="#ef4444" font-family="sans-serif" font-size="9">⚠ Function not defined</text>
+  <!-- Trust tool window -->
+  <rect x="580" y="32" width="220" height="448" fill="#313335" stroke="#45494a"/>
+  <text x="592" y="54" fill="#bbbbbb" font-family="sans-serif" font-size="12" font-weight="bold">🛡️ AI Trust Validator</text>
+  <!-- Score -->
+  <text x="690" y="90" text-anchor="middle" fill="#ef4444" font-family="sans-serif" font-size="36" font-weight="bold">45</text>
+  <text x="690" y="108" text-anchor="middle" fill="#808080" font-family="sans-serif" font-size="11">/ 100</text>
+  <rect x="605" y="118" width="170" height="8" rx="4" fill="#45494a"/>
+  <rect x="605" y="118" width="76" height="8" rx="4" fill="#ef4444"/>
+  <!-- Issues list -->
+  <text x="592" y="150" fill="#bbbbbb" font-family="sans-serif" font-size="11" font-weight="bold">Issues (4)</text>
+  <rect x="592" y="160" width="195" height="40" rx="4" fill="#ef4444" opacity="0.1"/>
+  <text x="600" y="175" fill="#ef4444" font-family="sans-serif" font-size="9" font-weight="bold">HALLUCINATION</text>
+  <text x="600" y="190" fill="#a9b7c6" font-family="sans-serif" font-size="9">Import 'fancy_lib' not found</text>
+  <rect x="592" y="205" width="195" height="40" rx="4" fill="#ef4444" opacity="0.1"/>
+  <text x="600" y="220" fill="#ef4444" font-family="sans-serif" font-size="9" font-weight="bold">SECURITY</text>
+  <text x="600" y="235" fill="#a9b7c6" font-family="sans-serif" font-size="9">Hardcoded API key on line 7</text>
+  <rect x="592" y="250" width="195" height="40" rx="4" fill="#ef4444" opacity="0.1"/>
+  <text x="600" y="265" fill="#ef4444" font-family="sans-serif" font-size="9" font-weight="bold">SECURITY</text>
+  <text x="600" y="280" fill="#a9b7c6" font-family="sans-serif" font-size="9">SQL injection via f-string</text>
+  <rect x="592" y="295" width="195" height="40" rx="4" fill="#ef4444" opacity="0.1"/>
+  <text x="600" y="310" fill="#ef4444" font-family="sans-serif" font-size="9" font-weight="bold">HALLUCINATION</text>
+  <text x="600" y="325" fill="#a9b7c6" font-family="sans-serif" font-size="9">'quick_sort_v2' not defined</text>
+  <!-- Fix button -->
+  <rect x="610" y="350" width="160" height="32" rx="6" fill="#6366f1"/>
+  <text x="690" y="370" text-anchor="middle" fill="white" font-family="sans-serif" font-size="12" font-weight="bold">🤖 AI Auto-Fix All</text>
+  <!-- Status bar -->
+  <rect y="468" width="800" height="12" fill="#6366f1"/>
+  <text x="400" y="477" text-anchor="middle" fill="white" font-family="sans-serif" font-size="9" font-weight="bold">🛡️ Trust: 45/100 | 4 issues | AI Fix available</text>
+</svg>
