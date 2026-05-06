@@ -39,7 +39,7 @@ console = Console()
 
 
 @click.group()
-@click.version_option(version="0.3.0", prog_name="ai-trust-validator")
+@click.version_option(version="0.4.0", prog_name="ai-trust-validator")
 def main():
     """
     🛡️ AI Code Trust Validator - Trust your AI-generated code.
@@ -63,6 +63,7 @@ def main():
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.option("--config", type=click.Path(exists=True), help="Path to config file")
 @click.option("--cache/--no-cache", default=True, help="Use caching")
+@click.option("--git-diff", type=click.Choice(["staged", "working", "committed"]), help="Only validate changed files in git diff")
 def validate(
     path: Optional[str],
     stdin: bool,
@@ -70,7 +71,8 @@ def validate(
     strict: bool,
     json_output: bool,
     config: Optional[str],
-    cache: bool
+    cache: bool,
+    git_diff: Optional[str]
 ):
     """
     Validate AI-generated code and produce a trust score.
@@ -85,6 +87,9 @@ def validate(
 
     cfg.min_score = min_score
     cfg.strict_mode = strict or cfg.strict_mode
+
+    if git_diff and not path:
+        path = "."
 
     # Initialize cache
     cache_mgr = CacheManager(enabled=cache)
@@ -536,9 +541,26 @@ def lsp():
     console.print("[bold]🚀 Starting LSP Server...[/bold]")
     console.print("[dim]Connect your IDE to use AI Trust Validator in real-time.[/dim]")
     console.print("[dim]Press Ctrl+C to stop.[/dim]\n")
-    
+
     from ai_trust_validator.lsp_server import run_lsp_server
     run_lsp_server()
+
+
+@main.command("languages")
+def languages():
+    """Show supported languages and file extensions."""
+    from ai_trust_validator.languages import LANGUAGE_MAP
+
+    table = Table(title="🌐 Supported Languages")
+    table.add_column("Language", style="cyan")
+    table.add_column("Extensions", style="green")
+    table.add_column("Status")
+
+    for lang, info in sorted(LANGUAGE_MAP.items()):
+        exts = ", ".join(f".{e}" for e in info["extensions"])
+        table.add_row(lang.title(), exts, "✅ Supported")
+
+    console.print(table)
 
 
 if __name__ == "__main__":

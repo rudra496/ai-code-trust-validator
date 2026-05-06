@@ -47,6 +47,33 @@ class SecurityAnalyzer(BaseAnalyzer):
         r'f["\'].*SELECT.*\{',  # f-string with SQL
     ]
 
+    # Path traversal patterns
+    PATH_TRAVERSAL_PATTERNS = [
+        (r'open\s*\(\s*f["\']', "Potential path traversal via f-string in open()"),
+        (r'open\s*\(\s*["\'].*\.\.', "Path traversal: '..' in file path"),
+        (r'Path\s*\(\s*f["\']', "Potential path traversal via f-string in Path()"),
+    ]
+
+    # SSRF (Server-Side Request Forgery) patterns
+    SSRF_PATTERNS = [
+        (r'requests\.(get|post|put|delete|patch)\s*\(\s*f["\']', "SSRF risk: user-controlled URL via f-string"),
+        (r'urllib\.request\.urlopen\s*\(\s*f["\']', "SSRF risk: user-controlled URL via f-string"),
+        (r'httpx\.(get|post)\s*\(\s*f["\']', "SSRF risk: user-controlled URL via f-string"),
+    ]
+
+    # YAML deserialization risk
+    YAML_DESERIALIZATION = [
+        (r'yaml\.load\s*\(', "yaml.load() without Loader is unsafe, use yaml.safe_load()"),
+        (r'yaml\.load\s*\([^)]*\bLoader\s*=\s*None\b', "yaml.load with Loader=None is unsafe"),
+        (r'pickle\.load\s*\(', "pickle.load() can execute arbitrary code, use json instead"),
+        (r'pickle\.loads\s*\(', "pickle.loads() can execute arbitrary code"),
+    ]
+
+    # Hardcoded URLs / internal IPs
+    INTERNAL_URL_PATTERNS = [
+        (r'https?://(?:localhost|127\.0\.0\.1|0\.0\.0\.0|10\.\d+|192\.168\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+)', "Hardcoded internal URL detected"),
+    ]
+
     def analyze(self, tree: ast.AST, code: str) -> List[Issue]:
         """Analyze code for security issues."""
         issues: List[Issue] = []
@@ -70,6 +97,12 @@ class SecurityAnalyzer(BaseAnalyzer):
 
             # Check for os.system calls
             issues.extend(self._check_os_system(node))
+
+        # Check for path traversal, SSRF, YAML deserialization
+        issues.extend(self._check_pattern_list(code, self.PATH_TRAVERSAL_PATTERNS, "high", "security"))
+        issues.extend(self._check_pattern_list(code, self.SSRF_PATTERNS, "high", "security"))
+        issues.extend(self._check_pattern_list(code, self.YAML_DESERIALIZATION, "critical", "security"))
+        issues.extend(self._check_pattern_list(code, self.INTERNAL_URL_PATTERNS, "medium", "security"))
 
         return issues
 
@@ -180,3 +213,18 @@ class SecurityAnalyzer(BaseAnalyzer):
         elif isinstance(node.func, ast.Attribute):
             return node.func.attr
         return ""
+
+    def _check_pattern_list(self, code: str, patterns: list, severity: str, category: str) -> List[Issue]:
+        """Check code against a list of (regex, message) patterns."""
+        issues: List[Issue] = []
+        lines = code.split("\n")
+        for pattern, message in patterns:
+            for i, line in enumerate(lines, 1):
+                if re.search(pattern, line):
+                    issues.append(Issue(
+                        severity=severity,
+                        category=category,
+                        message=message,
+                        line=i,
+                    ))
+        return issues
