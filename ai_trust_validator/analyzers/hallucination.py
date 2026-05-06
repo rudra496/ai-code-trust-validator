@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import List, Set, Dict, Optional
 
 from ai_trust_validator.analyzers import BaseAnalyzer
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 
 # Known standard library modules (Python 3.8+)

@@ -3,7 +3,7 @@ import os, json, re, urllib.request, urllib.error
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
-from ai_trust_validator.validator import Issue, ValidationResult
+from ai_trust_validator.models import Issue, ValidationResult
 
 @dataclass
 class FixResult:

@@ -15,7 +15,7 @@ import re
 from typing import List
 
 from ai_trust_validator.analyzers import BaseAnalyzer
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 
 class BestPracticesAnalyzer(BaseAnalyzer):

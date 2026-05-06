@@ -1,7 +1,7 @@
 """JavaScript/TypeScript Hallucination Analyzer."""
 import re
 from typing import List, Dict
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 class JSHallucinationAnalyzer:
     base_score = 100

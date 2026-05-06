@@ -2,7 +2,7 @@
 
 import pytest
 from ai_trust_validator import Validator, Config
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 
 def test_validator_basic():

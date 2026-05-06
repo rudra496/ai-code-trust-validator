@@ -4,7 +4,7 @@ SARIF Reporter - Output results in SARIF format for GitHub Advanced Security.
 
 import json
 from typing import List
-from ai_trust_validator.validator import ValidationResult
+from ai_trust_validator.models import ValidationResult
 
 
 class SARIFReporter:

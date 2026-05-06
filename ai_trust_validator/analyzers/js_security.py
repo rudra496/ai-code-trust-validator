@@ -1,7 +1,7 @@
 """JavaScript/TypeScript Security Analyzer."""
 import re
 from typing import List
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 class JSSecurityAnalyzer:
     base_score = 100

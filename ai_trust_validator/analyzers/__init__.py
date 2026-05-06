@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 import ast
 from typing import List
 
-from ai_trust_validator.validator import Issue
 from ai_trust_validator.config import Config
+from ai_trust_validator.models import Issue
 
 
 class BaseAnalyzer(ABC):
@@ -20,11 +20,11 @@ class BaseAnalyzer(ABC):
     def analyze(self, tree: ast.AST, code: str) -> List[Issue]:
         """
         Analyze AST and code, returning list of issues found.
-        
+
         Args:
             tree: Parsed AST of the code
             code: Original source code as string
-            
+
         Returns:
             List of Issue objects found
         """

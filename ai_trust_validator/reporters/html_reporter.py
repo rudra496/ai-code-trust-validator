@@ -3,7 +3,7 @@ HTML Reporter - Generate beautiful HTML reports for sharing.
 """
 
 from typing import List
-from ai_trust_validator.validator import ValidationResult
+from ai_trust_validator.models import ValidationResult
 
 
 class HTMLReporter:

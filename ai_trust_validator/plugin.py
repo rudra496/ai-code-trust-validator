@@ -11,7 +11,7 @@ import importlib
 import inspect
 from pathlib import Path
 
-from ai_trust_validator.validator import Issue
+from ai_trust_validator.models import Issue
 
 
 @dataclass

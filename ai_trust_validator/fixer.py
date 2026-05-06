@@ -7,7 +7,7 @@ import re
 from typing import List, Optional
 from dataclasses import dataclass
 
-from ai_trust_validator.validator import Issue, ValidationResult
+from ai_trust_validator.models import Issue, ValidationResult
 
 
 @dataclass

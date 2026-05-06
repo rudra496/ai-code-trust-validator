@@ -2,7 +2,9 @@
 import ast
 from pathlib import Path
 from typing import Optional, List
-from ai_trust_validator.validator import Validator, ValidationResult, Issue, CategoryScore, Config
+from ai_trust_validator.validator import Validator
+from ai_trust_validator.models import ValidationResult, Issue, CategoryScore
+from ai_trust_validator.config import Config
 from ai_trust_validator.languages import detect_language, get_parser
 from ai_trust_validator.analyzers.js_security import JSSecurityAnalyzer
 from ai_trust_validator.analyzers.js_hallucination import JSHallucinationAnalyzer
