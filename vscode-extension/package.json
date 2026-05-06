@@ -172,7 +172,7 @@
     "eslint": "^8.0.0",
     "typescript": "^5.0.0",
     "@vscode/test-electron": "^2.3.0",
-    "@vscode/vsce": "^2.20.0"
+    "@vscode/vsce": "^3.9.1"
   },
   "dependencies": {}
 }
