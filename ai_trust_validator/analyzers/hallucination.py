@@ -9,14 +9,11 @@ Detects AI hallucinations in code:
 """
 
 import ast
-import json
 import re
-from pathlib import Path
-from typing import List, Set, Dict, Optional
+from typing import Dict, List, Optional, Set
 
 from ai_trust_validator.analyzers import BaseAnalyzer
 from ai_trust_validator.models import Issue
-
 
 # Known standard library modules (Python 3.8+)
 STDLIB_MODULES = {
@@ -61,7 +58,7 @@ POPULAR_PACKAGES = {
     "torch", "keras", "requests", "flask", "django", "fastapi", "pydantic",
     "pytest", "selenium", "beautifulsoup4", "bs4", "pillow", "PIL",
     "sqlalchemy", "celery", "redis", "pymongo", "boto3", "click",
-    "rich", "tqdm", "numpy", "pandas", "polars", "pyarrow",
+    "rich", "tqdm", "polars", "pyarrow",
     "opencv", "cv2", "scikit-learn", "xgboost", "lightgbm",
     "transformers", "huggingface_hub", "langchain", "openai", "anthropic",
 }
@@ -168,9 +165,7 @@ class HallucinationAnalyzer(BaseAnalyzer):
         # Collect all defined functions and classes
         defined_names: Set[str] = set()
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
-                defined_names.add(node.name)
-            elif isinstance(node, ast.ClassDef):
+            if isinstance(node, ast.FunctionDef) or isinstance(node, ast.ClassDef):
                 defined_names.add(node.name)
             elif isinstance(node, ast.Assign):
                 for target in node.targets:

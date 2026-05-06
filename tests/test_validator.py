@@ -1,8 +1,6 @@
 """Tests for AI Trust Validator."""
 
-import pytest
-from ai_trust_validator import Validator, Config
-from ai_trust_validator.models import Issue
+from ai_trust_validator import Config, Validator
 
 
 def test_validator_basic():

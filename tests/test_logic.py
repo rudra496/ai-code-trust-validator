@@ -1,6 +1,7 @@
 """Tests for Logic Analyzer."""
 
 import pytest
+
 from ai_trust_validator.analyzers.logic import LogicAnalyzer
 from ai_trust_validator.config import Config
 

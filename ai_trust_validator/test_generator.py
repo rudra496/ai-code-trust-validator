@@ -3,9 +3,8 @@ Test Generator - Generate pytest tests for AI-generated code.
 """
 
 import ast
-import re
-from typing import List, Optional
 from dataclasses import dataclass
+from typing import List, Optional
 
 
 @dataclass

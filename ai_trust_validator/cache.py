@@ -6,12 +6,11 @@ Uses content hashing to cache results and skip re-analysis.
 
 import hashlib
 import json
-import os
-from dataclasses import dataclass, asdict
+import threading
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional, Dict, Any
-import threading
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -88,7 +87,7 @@ class CacheManager:
             cache_file = self.cache_dir / f"{content_hash}.json"
             if cache_file.exists():
                 try:
-                    with open(cache_file, "r") as f:
+                    with open(cache_file) as f:
                         data = json.load(f)
                     entry = CacheEntry(**data)
                     if not self._is_expired(entry):
@@ -189,7 +188,7 @@ class CacheManager:
             # Disk cache
             for cache_file in self.cache_dir.glob("*.json"):
                 try:
-                    with open(cache_file, "r") as f:
+                    with open(cache_file) as f:
                         data = json.load(f)
                     entry = CacheEntry(**data)
                     if self._is_expired(entry):
@@ -233,7 +232,7 @@ class CacheManager:
 
         for cache_file in self.cache_dir.glob("*.json"):
             try:
-                with open(cache_file, "r") as f:
+                with open(cache_file) as f:
                     data = json.load(f)
                 entry = CacheEntry(**data)
 

@@ -1,6 +1,7 @@
 """Tests for Hallucination Analyzer."""
 
 import pytest
+
 from ai_trust_validator.analyzers.hallucination import HallucinationAnalyzer
 from ai_trust_validator.config import Config
 

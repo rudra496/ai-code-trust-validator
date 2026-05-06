@@ -1,7 +1,7 @@
 """Multi-language support module."""
 from ai_trust_validator.languages.base import LanguageParser, ParseResult
-from ai_trust_validator.languages.python_parser import PythonParser
 from ai_trust_validator.languages.javascript_parser import JavaScriptParser
+from ai_trust_validator.languages.python_parser import PythonParser
 from ai_trust_validator.languages.typescript_parser import TypeScriptParser
 
 LANGUAGE_MAP = {

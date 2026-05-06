@@ -1,7 +1,7 @@
 """Base analyzer module."""
 
-from abc import ABC, abstractmethod
 import ast
+from abc import ABC, abstractmethod
 from typing import List
 
 from ai_trust_validator.config import Config

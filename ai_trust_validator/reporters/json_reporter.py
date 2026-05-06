@@ -4,6 +4,7 @@ JSON Reporter - Output results in JSON format for CI/CD integration.
 
 import json
 from typing import List
+
 from ai_trust_validator.models import ValidationResult
 
 

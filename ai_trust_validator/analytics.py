@@ -6,11 +6,10 @@ Store and analyze validation results for teams.
 
 import json
 import sqlite3
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-from collections import defaultdict
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -56,18 +55,18 @@ class AnalyticsDB:
     
     Stores validation results for team analysis.
     """
-    
+
     DEFAULT_DB = ".aitrust_analytics.db"
-    
+
     def __init__(self, db_path: Optional[str] = None):
         self.db_path = Path(db_path or self.DEFAULT_DB)
         self._init_db()
-    
+
     def _init_db(self):
         """Initialize database schema."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS validations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,22 +88,22 @@ class AnalyticsDB:
                 commit TEXT
             )
         """)
-        
+
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_timestamp ON validations(timestamp)
         """)
-        
+
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_project ON validations(project)
         """)
-        
+
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_user ON validations(user)
         """)
-        
+
         conn.commit()
         conn.close()
-    
+
     def record_validation(
         self,
         file_path: str,
@@ -117,9 +116,9 @@ class AnalyticsDB:
         """Store a validation result."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         categories = result.categories or {}
-        
+
         cursor.execute("""
             INSERT INTO validations (
                 timestamp, file_path, trust_score, passed,
@@ -145,13 +144,13 @@ class AnalyticsDB:
             branch,
             commit
         ))
-        
+
         record_id = cursor.lastrowid
         conn.commit()
         conn.close()
-        
+
         return record_id
-    
+
     def get_stats(
         self,
         project: Optional[str] = None,
@@ -161,25 +160,25 @@ class AnalyticsDB:
         """Get team statistics."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         # Build query
         where_clauses = [f"timestamp >= datetime('now', '-{days} days')"]
         params = []
-        
+
         if project:
             where_clauses.append("project = ?")
             params.append(project)
-        
+
         if user:
             where_clauses.append("user = ?")
             params.append(user)
-        
+
         where_sql = " AND ".join(where_clauses)
-        
+
         # Total validations
         cursor.execute(f"SELECT COUNT(*) FROM validations WHERE {where_sql}", params)
         total = cursor.fetchone()[0]
-        
+
         if total == 0:
             conn.close()
             return TeamStats(
@@ -194,26 +193,26 @@ class AnalyticsDB:
                 project_breakdown=[],
                 user_rankings=[]
             )
-        
+
         # Average score
         cursor.execute(f"SELECT AVG(trust_score) FROM validations WHERE {where_sql}", params)
         avg_score = cursor.fetchone()[0] or 0
-        
+
         # Pass rate
         cursor.execute(f"SELECT AVG(passed) FROM validations WHERE {where_sql}", params)
         pass_rate = (cursor.fetchone()[0] or 0) * 100
-        
+
         # Total issues
         cursor.execute(f"""
             SELECT SUM(critical_count + high_count + medium_count + low_count)
             FROM validations WHERE {where_sql}
         """, params)
         total_issues = cursor.fetchone()[0] or 0
-        
+
         # Critical issues
         cursor.execute(f"SELECT SUM(critical_count) FROM validations WHERE {where_sql}", params)
         critical_issues = cursor.fetchone()[0] or 0
-        
+
         # Score trend (by day)
         cursor.execute(f"""
             SELECT date(timestamp) as day, AVG(trust_score), COUNT(*)
@@ -224,7 +223,7 @@ class AnalyticsDB:
             {"date": row[0], "avg_score": round(row[1], 1), "count": row[2]}
             for row in cursor.fetchall()
         ]
-        
+
         # Category averages
         cursor.execute(f"""
             SELECT 
@@ -241,7 +240,7 @@ class AnalyticsDB:
             "logic": round(row[2], 1) if row[2] else 0,
             "best_practices": round(row[3], 1) if row[3] else 0,
         }
-        
+
         # Project breakdown
         cursor.execute(f"""
             SELECT project, COUNT(*), AVG(trust_score), SUM(critical_count)
@@ -257,7 +256,7 @@ class AnalyticsDB:
             }
             for row in cursor.fetchall()
         ]
-        
+
         # User rankings
         cursor.execute(f"""
             SELECT user, COUNT(*), AVG(trust_score)
@@ -272,9 +271,9 @@ class AnalyticsDB:
             }
             for row in cursor.fetchall()
         ]
-        
+
         conn.close()
-        
+
         return TeamStats(
             total_validations=total,
             average_score=round(avg_score, 1),
@@ -287,12 +286,12 @@ class AnalyticsDB:
             project_breakdown=project_breakdown,
             user_rankings=user_rankings
         )
-    
+
     def get_leaderboard(self, days: int = 7, limit: int = 10) -> List[Dict]:
         """Get leaderboard of users by trust score."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         cursor.execute(f"""
             SELECT 
                 user,
@@ -305,7 +304,7 @@ class AnalyticsDB:
             ORDER BY avg_score DESC
             LIMIT ?
         """, (limit,))
-        
+
         leaderboard = [
             {
                 "rank": i + 1,
@@ -316,26 +315,26 @@ class AnalyticsDB:
             }
             for i, row in enumerate(cursor.fetchall())
         ]
-        
+
         conn.close()
         return leaderboard
-    
+
     def export_data(self, output_path: str, days: int = 30) -> None:
         """Export analytics data to JSON."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         cursor.execute(f"""
             SELECT * FROM validations
             WHERE timestamp >= datetime('now', '-{days} days')
             ORDER BY timestamp DESC
         """)
-        
+
         columns = [desc[0] for desc in cursor.description]
         records = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
+
         conn.close()
-        
+
         with open(output_path, 'w') as f:
             json.dump({
                 "exported_at": datetime.utcnow().isoformat(),
@@ -361,10 +360,10 @@ def generate_analytics_report(stats: TeamStats) -> str:
         "📊 Category Averages",
         "-" * 40,
     ]
-    
+
     for cat, score in stats.category_averages.items():
         lines.append(f"  {cat.title()}: {score}/100")
-    
+
     if stats.project_breakdown:
         lines.extend([
             "",
@@ -373,7 +372,7 @@ def generate_analytics_report(stats: TeamStats) -> str:
         ])
         for p in stats.project_breakdown[:5]:
             lines.append(f"  {p['project']}: {p['validations']} validations, {p['avg_score']} avg score")
-    
+
     if stats.user_rankings:
         lines.extend([
             "",
@@ -382,5 +381,5 @@ def generate_analytics_report(stats: TeamStats) -> str:
         ])
         for u in stats.user_rankings[:5]:
             lines.append(f"  {u['user']}: {u['avg_score']} avg score ({u['validations']} validations)")
-    
+
     return "\n".join(lines)

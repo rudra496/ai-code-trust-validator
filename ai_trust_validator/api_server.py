@@ -7,12 +7,10 @@ API docs at: http://localhost:8080/docs
 
 import json
 import time
-from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any, List
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
-import threading
-import re
+from dataclasses import asdict, dataclass
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any, Dict, Optional
+from urllib.parse import parse_qs, urlparse
 
 
 @dataclass
@@ -27,14 +25,14 @@ class APIResponse:
 
 class ValidationAPIHandler(BaseHTTPRequestHandler):
     """HTTP handler for validation API."""
-    
+
     validator = None
     config = None
-    
+
     def log_message(self, format, *args):
         """Override to use custom logging."""
         pass  # Suppress default logging
-    
+
     def _send_json(self, status: int, response: APIResponse):
         """Send JSON response."""
         response.timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -45,12 +43,12 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
         self.wfile.write(json.dumps(asdict(response)).encode())
-    
+
     def _read_body(self) -> bytes:
         """Read request body."""
         content_length = int(self.headers.get("Content-Length", 0))
         return self.rfile.read(content_length)
-    
+
     def do_OPTIONS(self):
         """Handle CORS preflight."""
         self.send_response(200)
@@ -58,15 +56,15 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
-    
+
     def do_GET(self):
         """Handle GET requests."""
         parsed = urlparse(self.path)
         path = parsed.path
         query = parse_qs(parsed.query)
-        
+
         start_time = time.time()
-        
+
         if path == "/":
             # Root - API info
             response = APIResponse(
@@ -85,7 +83,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(200, response)
-        
+
         elif path == "/health":
             # Health check
             response = APIResponse(
@@ -94,14 +92,14 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(200, response)
-        
+
         elif path == "/stats":
             # Get statistics
             stats = self._get_stats()
             response = APIResponse(success=True, data=stats)
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(200, response)
-        
+
         elif path == "/docs":
             # API documentation
             docs = self._generate_docs()
@@ -109,7 +107,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(docs.encode())
-        
+
         else:
             response = APIResponse(
                 success=False,
@@ -117,14 +115,14 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(404, response)
-    
+
     def do_POST(self):
         """Handle POST requests."""
         parsed = urlparse(self.path)
         path = parsed.path
-        
+
         start_time = time.time()
-        
+
         if path == "/validate":
             self._handle_validate(start_time)
         elif path == "/validate/batch":
@@ -136,13 +134,13 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(404, response)
-    
+
     def _handle_validate(self, start_time: float):
         """Handle single validation request."""
         try:
             body = self._read_body().decode("utf-8")
             data = json.loads(body)
-            
+
             code = data.get("code")
             if not code:
                 response = APIResponse(
@@ -152,17 +150,17 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
                 response.duration_ms = (time.time() - start_time) * 1000
                 self._send_json(400, response)
                 return
-            
+
             # Optional parameters
             min_score = data.get("min_score", 70)
             strict = data.get("strict", False)
-            
+
             # Validate
-            from ai_trust_validator import Validator, Config
+            from ai_trust_validator import Config, Validator
             config = Config(min_score=min_score, strict_mode=strict)
             validator = Validator(config)
             result = validator.validate(code, is_file=False)
-            
+
             response = APIResponse(
                 success=True,
                 data={
@@ -192,7 +190,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(200, response)
-        
+
         except json.JSONDecodeError:
             response = APIResponse(
                 success=False,
@@ -200,7 +198,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(400, response)
-        
+
         except Exception as e:
             response = APIResponse(
                 success=False,
@@ -208,13 +206,13 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(500, response)
-    
+
     def _handle_batch_validate(self, start_time: float):
         """Handle batch validation request."""
         try:
             body = self._read_body().decode("utf-8")
             data = json.loads(body)
-            
+
             files = data.get("files", [])
             if not files:
                 response = APIResponse(
@@ -224,15 +222,15 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
                 response.duration_ms = (time.time() - start_time) * 1000
                 self._send_json(400, response)
                 return
-            
+
             # Validate all files
-            from ai_trust_validator import Validator, Config
+            from ai_trust_validator import Config, Validator
             config = Config(
                 min_score=data.get("min_score", 70),
                 strict_mode=data.get("strict", False)
             )
             validator = Validator(config)
-            
+
             results = []
             for file_data in files:
                 result = validator.validate(file_data.get("code", ""), is_file=False)
@@ -242,7 +240,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
                     "passed": result.passed,
                     "critical_count": len(result.critical_issues)
                 })
-            
+
             response = APIResponse(
                 success=True,
                 data={
@@ -254,7 +252,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(200, response)
-        
+
         except Exception as e:
             response = APIResponse(
                 success=False,
@@ -262,7 +260,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             )
             response.duration_ms = (time.time() - start_time) * 1000
             self._send_json(500, response)
-    
+
     def _get_stats(self) -> Dict[str, Any]:
         """Get validation statistics."""
         return {
@@ -276,7 +274,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
                 "best_practices_check"
             ]
         }
-    
+
     def _generate_summary(self, result) -> str:
         """Generate a text summary."""
         if result.trust_score >= 80:
@@ -285,7 +283,7 @@ class ValidationAPIHandler(BaseHTTPRequestHandler):
             return f"Code needs attention (score: {result.trust_score}/100)"
         else:
             return f"Code has significant issues (score: {result.trust_score}/100)"
-    
+
     def _generate_docs(self) -> str:
         """Generate API documentation HTML."""
         return """<!DOCTYPE html>
@@ -361,7 +359,7 @@ def run_server(port: int = 8080, host: str = "0.0.0.0"):
     """Run the API server."""
     server_address = (host, port)
     httpd = HTTPServer(server_address, ValidationAPIHandler)
-    
+
     print(f"""
 ╔══════════════════════════════════════════════════════════╗
 ║  🛡️  AI Code Trust Validator API Server                  ║
@@ -373,7 +371,7 @@ def run_server(port: int = 8080, host: str = "0.0.0.0"):
 ║  Press Ctrl+C to stop                                    ║
 ╚══════════════════════════════════════════════════════════╝
 """)
-    
+
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

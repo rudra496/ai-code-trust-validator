@@ -16,24 +16,28 @@ Commands:
 import sys
 from pathlib import Path
 from typing import Optional
-import time
 
 import click
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
-from rich.syntax import Syntax
+from rich.table import Table
 
 from ai_trust_validator import (
-    Validator, Config, ValidationResult, Issue,
-    FixSuggester, TestGenerator, CacheManager,
-    PluginManager, Watcher, watch_with_dashboard,
-    BenchmarkSuite, run_full_benchmark,
-    MultiFileAnalyzer, MultiFileResult,
-    JSONReporter, HTMLReporter, SARIFReporter
+    BenchmarkSuite,
+    CacheManager,
+    Config,
+    FixSuggester,
+    HTMLReporter,
+    JSONReporter,
+    MultiFileAnalyzer,
+    SARIFReporter,
+    TestGenerator,
+    ValidationResult,
+    Validator,
+    Watcher,
+    watch_with_dashboard,
 )
 from ai_trust_validator.api_server import run_server
-
 
 console = Console()
 
@@ -173,7 +177,7 @@ def suggest_fixes(path: str, apply: bool):
     """Generate fix suggestions for detected issues."""
     path_obj = Path(path)
     code = path_obj.read_text(encoding="utf-8")
-    
+
     cfg = Config.find_and_load()
     validator = Validator(cfg)
     result = validator.validate(path_obj)
@@ -194,18 +198,18 @@ def suggest_fixes(path: str, apply: bool):
     for fix in fixes:
         severity = fix.issue.severity.upper()
         color = _severity_color(fix.issue.severity)
-        
+
         console.print(f"[{color}]{severity}[/{color}] {fix.issue.message}")
         if fix.issue.line:
             console.print(f"  [dim]Line {fix.issue.line}[/dim]")
-        
-        console.print(f"\n  [dim]Original:[/dim]")
+
+        console.print("\n  [dim]Original:[/dim]")
         console.print(f"  {fix.original_code}")
-        
-        console.print(f"\n  [green]Suggested:[/green]")
+
+        console.print("\n  [green]Suggested:[/green]")
         for line in fix.suggested_fix.split("\n"):
             console.print(f"  {line}")
-        
+
         console.print(f"\n  [dim]Confidence: {fix.confidence:.0%} | Auto-applicable: {'Yes' if fix.auto_applicable else 'No'}[/dim]")
         console.print()
 
@@ -245,12 +249,12 @@ def serve(port: int, host: str):
 def watch(path: str, refresh: float, dashboard: bool):
     """Watch files for changes and re-validate."""
     validator = Validator()
-    
+
     if dashboard:
         watch_with_dashboard(path, validator, refresh_rate=refresh)
     else:
         watcher = Watcher(validator)
-        
+
         def on_change(result, file_path):
             score = result.trust_score
             icon = "✅" if score >= 80 else "⚠️" if score >= 60 else "❌"
@@ -258,7 +262,7 @@ def watch(path: str, refresh: float, dashboard: bool):
             if result.critical_issues:
                 for issue in result.critical_issues[:3]:
                     console.print(f"   [red]• {issue.message}[/red]")
-        
+
         watcher.watch(path, on_change=on_change)
 
 
@@ -268,15 +272,15 @@ def watch(path: str, refresh: float, dashboard: bool):
 def benchmark(iterations: int, output: Optional[str]):
     """Run performance benchmarks."""
     from ai_trust_validator import Validator
-    
+
     console.print("[bold]🏃 Running benchmarks...[/bold]\n")
-    
+
     validator = Validator()
     suite = BenchmarkSuite(validator)
-    
+
     # Run performance benchmark
     results = suite.run_performance_benchmark(iterations=iterations)
-    
+
     # Display results
     table = Table(title="📊 Benchmark Results")
     table.add_column("Sample", style="cyan")
@@ -284,7 +288,7 @@ def benchmark(iterations: int, output: Optional[str]):
     table.add_column("Min (ms)", justify="right")
     table.add_column("Max (ms)", justify="right")
     table.add_column("Lines/sec", justify="right")
-    
+
     for name, result in results.items():
         table.add_row(
             name,
@@ -293,9 +297,9 @@ def benchmark(iterations: int, output: Optional[str]):
             f"{result.max_time_ms:.2f}",
             f"{result.lines_per_second:.0f}"
         )
-    
+
     console.print(table)
-    
+
     # Save if requested
     if output:
         suite.save_results(output)
@@ -307,20 +311,20 @@ def benchmark(iterations: int, output: Optional[str]):
 @click.option("--output", "-o", type=click.Path(), help="Output file for report")
 def analyze_deps(path: str, output: Optional[str]):
     """Analyze multi-file dependencies."""
-    from ai_trust_validator import MultiFileAnalyzer, Validator
-    
+    from ai_trust_validator import Validator
+
     console.print(f"[bold]🔍 Analyzing dependencies in {path}...[/bold]\n")
-    
+
     analyzer = MultiFileAnalyzer(validator=Validator())
     result = analyzer.analyze_directory(path)
-    
+
     # Summary
     console.print(Panel(
         f"Modules: {len(result.modules)} | "
         f"Overall Score: {result.overall_score}/100",
         title="📊 Summary"
     ))
-    
+
     # Circular dependencies
     if result.circular_dependencies:
         console.print("\n[red]⚠️ Circular Dependencies:[/red]")
@@ -328,19 +332,19 @@ def analyze_deps(path: str, output: Optional[str]):
             console.print(f"  • {a} ↔ {b}")
     else:
         console.print("\n[green]✓ No circular dependencies[/green]")
-    
+
     # Unused modules
     if result.unused_modules:
         console.print(f"\n[yellow]📦 Unused Modules ({len(result.unused_modules)}):[/yellow]")
         for m in result.unused_modules[:10]:
             console.print(f"  • {m}")
-    
+
     # Import issues
     if result.import_issues:
         console.print(f"\n[yellow]⚠️ Import Issues ({len(result.import_issues)}):[/yellow]")
         for issue in result.import_issues[:5]:
             console.print(f"  • {issue['message']}")
-    
+
     # Generate report
     if output:
         report = analyzer.generate_dependency_report()
@@ -353,7 +357,7 @@ def analyze_deps(path: str, output: Optional[str]):
 def cache(action: str):
     """Manage the validation cache."""
     cache_mgr = CacheManager()
-    
+
     if action == "stats":
         stats = cache_mgr.stats()
         console.print("[bold]📦 Cache Statistics[/bold]\n")
@@ -361,11 +365,11 @@ def cache(action: str):
         console.print(f"Disk entries: {stats['disk_entries']}")
         console.print(f"Total size: {stats['total_size_mb']} MB")
         console.print(f"Cache dir: {stats['cache_dir']}")
-    
+
     elif action == "clear":
         cache_mgr.clear()
         console.print("[green]✓ Cache cleared[/green]")
-    
+
     elif action == "cleanup":
         removed = cache_mgr.cleanup_expired()
         console.print(f"[green]✓ Removed {removed} expired entries[/green]")
@@ -431,7 +435,7 @@ def _output_rich(results: list[ValidationResult], cfg: Config):
             console.print(Panel("[green]✓ PASSED[/green]", expand=False))
         else:
             console.print(Panel("[red]✗ FAILED[/red]\n"
-                              f"Score below {cfg.min_score} or critical issues found", 
+                              f"Score below {cfg.min_score} or critical issues found",
                               expand=False))
 
 
@@ -460,21 +464,21 @@ def _output_json(results: list[ValidationResult]):
 @click.option("--leaderboard", is_flag=True, help="Show leaderboard")
 def analytics(days: int, project: Optional[str], output: Optional[str], leaderboard: bool):
     """View team analytics and statistics."""
-    from ai_trust_validator import AnalyticsDB, generate_analytics_report
-    
+    from ai_trust_validator import AnalyticsDB
+
     db = AnalyticsDB()
-    
+
     if leaderboard:
         console.print("[bold]🏆 Team Leaderboard[/bold]\n")
         board = db.get_leaderboard(days=days)
-        
+
         table = Table(show_header=True)
         table.add_column("Rank", justify="right")
         table.add_column("User")
         table.add_column("Validations", justify="right")
         table.add_column("Avg Score", justify="right")
         table.add_column("Pass Rate", justify="right")
-        
+
         for entry in board:
             table.add_row(
                 str(entry["rank"]),
@@ -483,12 +487,12 @@ def analytics(days: int, project: Optional[str], output: Optional[str], leaderbo
                 str(entry["avg_score"]),
                 f"{entry['pass_rate']}%"
             )
-        
+
         console.print(table)
         return
-    
+
     stats = db.get_stats(days=days, project=project)
-    
+
     # Summary panel
     console.print(Panel(
         f"Validations: {stats.total_validations} | "
@@ -497,19 +501,19 @@ def analytics(days: int, project: Optional[str], output: Optional[str], leaderbo
         f"Critical Issues: {stats.critical_issues}",
         title="📊 Analytics Summary"
     ))
-    
+
     # Category averages
     if stats.category_averages:
         console.print("\n[bold]Category Averages[/bold]")
         table = Table(show_header=True)
         table.add_column("Category")
         table.add_column("Avg Score", justify="right")
-        
+
         for cat, score in stats.category_averages.items():
             table.add_row(cat.replace("_", " ").title(), str(score))
-        
+
         console.print(table)
-    
+
     # Project breakdown
     if stats.project_breakdown:
         console.print("\n[bold]📁 Projects[/bold]")
@@ -518,7 +522,7 @@ def analytics(days: int, project: Optional[str], output: Optional[str], leaderbo
         table.add_column("Validations", justify="right")
         table.add_column("Avg Score", justify="right")
         table.add_column("Critical", justify="right")
-        
+
         for p in stats.project_breakdown[:10]:
             table.add_row(
                 p["project"],
@@ -526,9 +530,9 @@ def analytics(days: int, project: Optional[str], output: Optional[str], leaderbo
                 str(p["avg_score"]),
                 str(p["critical_issues"])
             )
-        
+
         console.print(table)
-    
+
     # Export if requested
     if output:
         db.export_data(output, days=days)

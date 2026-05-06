@@ -2,10 +2,9 @@
 Fix Suggester - Generate fix suggestions for common issues.
 """
 
-import ast
 import re
-from typing import List, Optional
 from dataclasses import dataclass
+from typing import List, Optional
 
 from ai_trust_validator.models import Issue, ValidationResult
 

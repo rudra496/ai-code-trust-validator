@@ -4,6 +4,7 @@ SARIF Reporter - Output results in SARIF format for GitHub Advanced Security.
 
 import json
 from typing import List
+
 from ai_trust_validator.models import ValidationResult
 
 
@@ -33,7 +34,7 @@ class SARIFReporter:
     def _generate_rules(self, results: List[ValidationResult]) -> List[dict]:
         """Generate unique rules from all issues."""
         rules = {}
-        
+
         for result in results:
             for issue in result.all_issues:
                 rule_id = f"{issue.category}_{issue.severity}"
@@ -52,17 +53,17 @@ class SARIFReporter:
                         },
                         "helpUri": f"https://github.com/rudra496/ai-code-trust-validator/wiki/{issue.category}"
                     }
-        
+
         return list(rules.values())
 
     def _generate_results(self, results: List[ValidationResult]) -> List[dict]:
         """Generate SARIF results."""
         sarif_results = []
-        
+
         for result in results:
             if not result.file_path:
                 continue
-                
+
             for issue in result.all_issues:
                 sarif_results.append({
                     "ruleId": f"{issue.category}_{issue.severity}",
@@ -86,7 +87,7 @@ class SARIFReporter:
                         "severity": issue.severity
                     }
                 })
-        
+
         return sarif_results
 
     def _severity_to_level(self, severity: str) -> str:

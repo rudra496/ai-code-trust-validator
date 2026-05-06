@@ -1,8 +1,10 @@
 """JavaScript/TypeScript language parser using regex-based analysis."""
 import re
-from typing import List, Any, Dict
 from dataclasses import dataclass
+from typing import Any, Dict, List
+
 from ai_trust_validator.languages.base import LanguageParser, ParseResult
+
 
 @dataclass
 class JSNode:
@@ -14,7 +16,7 @@ class JSNode:
 class JavaScriptParser(LanguageParser):
     language = "javascript"
     extensions = [".js", ".mjs", ".cjs", ".jsx"]
-    
+
     PATTERNS = {
         'import_default': re.compile(r'import\s+(\w+)\s+from\s*["\']([^"\']+)["\']'),
         'import_named': re.compile(r'import\s+\{([^}]+)\}\s+from\s*["\']([^"\']+)["\']'),
@@ -25,7 +27,7 @@ class JavaScriptParser(LanguageParser):
         'eval': re.compile(r'\beval\s*\('),
         'inner_html': re.compile(r'\.innerHTML\s*='),
     }
-    
+
     def parse(self, code: str) -> ParseResult:
         lines = code.split('\n')
         return ParseResult(success=True, ast=[], code=code, language="javascript", lines=lines,
@@ -33,10 +35,10 @@ class JavaScriptParser(LanguageParser):
                     [m.group(2) for m in self.PATTERNS['import_named'].finditer(code)],
             functions=[m.group(1) for m in self.PATTERNS['function_decl'].finditer(code)],
             classes=[m.group(1) for m in self.PATTERNS['class_decl'].finditer(code)])
-    
+
     def get_line(self, node: Any) -> int:
         return getattr(node, "line", 0) if hasattr(node, "line") else 0
-    
+
     def find_security_issues(self, code: str) -> List[Dict]:
         issues, lines = [], code.split('\n')
         security_patterns = [
@@ -48,7 +50,7 @@ class JavaScriptParser(LanguageParser):
                 if pattern.search(line) and not line.strip().startswith('//'):
                     issues.append({'severity': severity, 'message': message, 'line': i})
         return issues
-    
+
     def find_best_practice_issues(self, code: str) -> List[Dict]:
         issues, lines = [], code.split('\n')
         patterns = [

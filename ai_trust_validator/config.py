@@ -86,8 +86,8 @@ class Config:
             if name in checks_data:
                 check_data = checks_data[name]
                 setattr(
-                    checks, 
-                    name, 
+                    checks,
+                    name,
                     CheckConfig(
                         enabled=check_data.get("enabled", True),
                         weight=check_data.get("weight", 1.0)

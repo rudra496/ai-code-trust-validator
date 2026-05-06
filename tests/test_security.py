@@ -1,6 +1,7 @@
 """Tests for Security Analyzer."""
 
 import pytest
+
 from ai_trust_validator.analyzers.security import SecurityAnalyzer
 from ai_trust_validator.config import Config
 

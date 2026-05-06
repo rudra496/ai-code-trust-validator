@@ -4,11 +4,10 @@ Benchmark Suite - Performance and accuracy benchmarking.
 Compare against other tools and measure performance.
 """
 
-import time
 import statistics
+import time
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional, Callable
-from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
 
 @dataclass
@@ -49,7 +48,7 @@ class BenchmarkSuite:
     - Accuracy (precision, recall, F1)
     - Comparison with other tools
     """
-    
+
     # Sample code for benchmarking
     SAMPLE_CODES = {
         "simple": '''def hello():
@@ -121,11 +120,11 @@ class BadClass:
     pass
 ''',
     }
-    
+
     def __init__(self, validator):
         self.validator = validator
         self.results: List[BenchmarkResult] = []
-    
+
     def run_performance_benchmark(
         self,
         code_samples: Optional[Dict[str, str]] = None,
@@ -145,22 +144,22 @@ class BadClass:
         """
         samples = code_samples or self.SAMPLE_CODES
         results = {}
-        
+
         for name, code in samples.items():
             # Warmup
             for _ in range(warmup):
                 self.validator.validate(code, is_file=False)
-            
+
             # Benchmark
             times = []
             lines = len(code.split("\n"))
-            
+
             for _ in range(iterations):
                 start = time.perf_counter()
                 self.validator.validate(code, is_file=False)
                 end = time.perf_counter()
                 times.append((end - start) * 1000)  # ms
-            
+
             result = BenchmarkResult(
                 name=name,
                 iterations=iterations,
@@ -175,9 +174,9 @@ class BadClass:
             )
             results[name] = result
             self.results.append(result)
-        
+
         return results
-    
+
     def run_accuracy_benchmark(
         self,
         test_cases: List[Dict[str, Any]]
@@ -192,23 +191,23 @@ class BadClass:
             AccuracyResult with precision, recall, F1
         """
         tp = tn = fp = fn = 0
-        
+
         for case in test_cases:
             code = case["code"]
             expected_issues = case.get("expected_issues", [])
             expected_categories = case.get("expected_categories", [])
-            
+
             result = self.validator.validate(code, is_file=False)
-            
+
             # Check if issues were found as expected
             found_categories = set(result.categories.keys())
             expected = set(expected_categories)
-            
+
             # True positive: expected issue found
             # True negative: no issue expected, none found
             # False positive: issue found but not expected
             # False negative: issue expected but not found
-            
+
             if expected_issues and len(result.all_issues) > 0:
                 tp += 1
             elif not expected_issues and len(result.all_issues) == 0:
@@ -217,12 +216,12 @@ class BadClass:
                 fp += 1
             elif expected_issues and len(result.all_issues) == 0:
                 fn += 1
-        
+
         # Calculate metrics
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-        
+
         return AccuracyResult(
             true_positives=tp,
             true_negatives=tn,
@@ -232,7 +231,7 @@ class BadClass:
             recall=recall,
             f1_score=f1
         )
-    
+
     def compare_with(
         self,
         other_tool: Callable,
@@ -252,7 +251,7 @@ class BadClass:
         """
         samples = code_samples or self.SAMPLE_CODES
         comparison = {}
-        
+
         for name, code in samples:
             # Our tool
             our_times = []
@@ -260,26 +259,26 @@ class BadClass:
                 start = time.perf_counter()
                 self.validator.validate(code, is_file=False)
                 our_times.append((time.perf_counter() - start) * 1000)
-            
+
             # Other tool
             other_times = []
             for _ in range(iterations):
                 start = time.perf_counter()
                 other_tool(code)
                 other_times.append((time.perf_counter() - start) * 1000)
-            
+
             our_avg = statistics.mean(our_times)
             other_avg = statistics.mean(other_times)
-            
+
             comparison[name] = {
                 "our_avg_ms": our_avg,
                 "other_avg_ms": other_avg,
                 "speedup": other_avg / our_avg if our_avg > 0 else 0,
                 "faster": our_avg < other_avg
             }
-        
+
         return comparison
-    
+
     def generate_report(self) -> str:
         """Generate a text report of all benchmarks."""
         lines = [
@@ -288,7 +287,7 @@ class BadClass:
             "=" * 60,
             ""
         ]
-        
+
         for result in self.results:
             lines.extend([
                 f"📊 {result.name}",
@@ -301,19 +300,19 @@ class BadClass:
                 f"  Throughput: {result.lines_per_second:.0f} lines/sec",
                 ""
             ])
-        
+
         return "\n".join(lines)
-    
+
     def save_results(self, path: str) -> None:
         """Save benchmark results to JSON."""
         import json
         from dataclasses import asdict
-        
+
         data = {
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "results": [asdict(r) for r in self.results]
         }
-        
+
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
@@ -321,10 +320,10 @@ class BadClass:
 def run_full_benchmark(validator) -> Dict[str, Any]:
     """Run a complete benchmark suite."""
     suite = BenchmarkSuite(validator)
-    
+
     # Performance
     perf_results = suite.run_performance_benchmark(iterations=100)
-    
+
     # Accuracy
     test_cases = [
         {
@@ -344,7 +343,7 @@ def run_full_benchmark(validator) -> Dict[str, Any]:
         }
     ]
     accuracy = suite.run_accuracy_benchmark(test_cases)
-    
+
     return {
         "performance": {name: {
             "avg_time_ms": r.avg_time_ms,

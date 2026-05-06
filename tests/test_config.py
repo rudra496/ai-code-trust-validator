@@ -1,8 +1,6 @@
 """Tests for Config module."""
 
-import pytest
-from ai_trust_validator.config import Config, CheckConfig, ChecksConfig
-from pathlib import Path
+from ai_trust_validator.config import Config
 
 
 class TestConfigDefaults:

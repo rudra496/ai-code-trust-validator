@@ -4,7 +4,7 @@ Base language parser interface.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -24,14 +24,14 @@ class ParseResult:
 
 class LanguageParser(ABC):
     """Base class for language-specific parsers."""
-    
+
     language: str = "unknown"
     extensions: List[str] = []
-    
+
     @abstractmethod
     def parse(self, code: str) -> ParseResult:
         pass
-    
+
     @abstractmethod
     def get_line(self, node: Any) -> int:
         pass

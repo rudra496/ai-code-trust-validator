@@ -4,12 +4,12 @@ Plugin System - Extensible architecture for custom analyzers.
 Create custom analyzers by implementing the AnalyzerPlugin interface.
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional, Callable
 import importlib
 import inspect
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
 from ai_trust_validator.models import Issue
 
@@ -34,13 +34,13 @@ class AnalyzerPlugin(ABC):
     2. Implement metadata and analyze methods
     3. Register with PluginManager
     """
-    
+
     @property
     @abstractmethod
     def metadata(self) -> PluginMetadata:
         """Return plugin metadata."""
         pass
-    
+
     @abstractmethod
     def analyze(self, tree: Any, code: str, context: Dict[str, Any]) -> List[Issue]:
         """
@@ -55,11 +55,11 @@ class AnalyzerPlugin(ABC):
             List of Issue objects found
         """
         pass
-    
+
     def should_run(self, file_path: Optional[str], context: Dict[str, Any]) -> bool:
         """Override to conditionally skip this analyzer."""
         return True
-    
+
     def priority(self) -> int:
         """Execution priority (lower = runs first)."""
         return self.metadata.priority
@@ -80,7 +80,7 @@ class PluginManager:
     - Loaded from Python files
     - Loaded from entry points
     """
-    
+
     def __init__(self):
         self._plugins: Dict[str, AnalyzerPlugin] = {}
         self._hooks: Dict[str, List[Callable]] = {
@@ -88,26 +88,26 @@ class PluginManager:
             "post_analyze": [],
             "on_issue_found": [],
         }
-    
+
     def register(self, plugin: AnalyzerPlugin) -> None:
         """Register a plugin instance."""
         name = plugin.metadata.name
         if name in self._plugins:
             raise ValueError(f"Plugin '{name}' already registered")
         self._plugins[name] = plugin
-    
+
     def unregister(self, name: str) -> None:
         """Unregister a plugin by name."""
         self._plugins.pop(name, None)
-    
+
     def get_plugin(self, name: str) -> Optional[AnalyzerPlugin]:
         """Get a registered plugin by name."""
         return self._plugins.get(name)
-    
+
     def list_plugins(self) -> List[str]:
         """List all registered plugin names."""
         return list(self._plugins.keys())
-    
+
     def run_all(
         self,
         tree: Any,
@@ -117,17 +117,17 @@ class PluginManager:
         """Run all registered plugins and collect issues."""
         context = context or {}
         all_issues: List[Issue] = []
-        
+
         # Run pre-analyze hooks
         for hook in self._hooks["pre_analyze"]:
             hook(tree, code, context)
-        
+
         # Run plugins in priority order
         sorted_plugins = sorted(
             self._plugins.values(),
             key=lambda p: p.priority()
         )
-        
+
         for plugin in sorted_plugins:
             if plugin.should_run(context.get("file_path"), context):
                 try:
@@ -141,23 +141,23 @@ class PluginManager:
                     # Log but don't fail
                     import warnings
                     warnings.warn(f"Plugin {plugin.metadata.name} failed: {e}")
-        
+
         # Run post-analyze hooks
         for hook in self._hooks["post_analyze"]:
             hook(all_issues, tree, code, context)
-        
+
         return all_issues
-    
+
     def add_hook(self, hook_type: str, callback: Callable) -> None:
         """Add a hook callback for specific events."""
         if hook_type in self._hooks:
             self._hooks[hook_type].append(callback)
-    
+
     def remove_hook(self, hook_type: str, callback: Callable) -> None:
         """Remove a hook callback."""
         if hook_type in self._hooks and callback in self._hooks[hook_type]:
             self._hooks[hook_type].remove(callback)
-    
+
     def load_from_file(self, file_path: str) -> List[str]:
         """
         Load plugins from a Python file.
@@ -166,16 +166,16 @@ class PluginManager:
         """
         loaded = []
         path = Path(file_path)
-        
+
         if not path.exists():
             raise FileNotFoundError(f"Plugin file not found: {file_path}")
-        
+
         # Dynamic import
         spec = importlib.util.spec_from_file_location("custom_plugin", path)
         if spec and spec.loader:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            
+
             # Find all AnalyzerPlugin subclasses
             for name, obj in inspect.getmembers(module, inspect.isclass):
                 if (
@@ -190,9 +190,9 @@ class PluginManager:
                     except Exception as e:
                         import warnings
                         warnings.warn(f"Failed to instantiate plugin {name}: {e}")
-        
+
         return loaded
-    
+
     def load_from_entry_points(self) -> List[str]:
         """
         Load plugins from setuptools entry points.
@@ -203,13 +203,13 @@ class PluginManager:
         try:
             import importlib.metadata
             entry_points = importlib.metadata.entry_points()
-            
+
             # Handle both old and new importlib.metadata APIs
             if hasattr(entry_points, 'select'):
                 eps = entry_points.select(group="ai_trust_validator.plugins")
             else:
                 eps = entry_points.get("ai_trust_validator.plugins", [])
-            
+
             for ep in eps:
                 try:
                     plugin_class = ep.load()
@@ -221,14 +221,14 @@ class PluginManager:
                     warnings.warn(f"Failed to load entry point {ep.name}: {e}")
         except ImportError:
             pass
-        
+
         return loaded
 
 
 # Example custom plugin
 class ExampleCustomPlugin(AnalyzerPlugin):
     """Example custom analyzer plugin."""
-    
+
     @property
     def metadata(self) -> PluginMetadata:
         return PluginMetadata(
@@ -238,7 +238,7 @@ class ExampleCustomPlugin(AnalyzerPlugin):
             description="Example custom analyzer plugin",
             priority=200
         )
-    
+
     def analyze(self, tree: Any, code: str, context: Dict[str, Any]) -> List[Issue]:
         issues = []
         # Your custom analysis logic here
@@ -274,10 +274,10 @@ def analyzer_plugin(
                     description=description,
                     priority=priority
                 )
-            
+
             def analyze(self, tree, code, context):
                 return func(tree, code, context)
-        
+
         return FunctionPlugin()
-    
+
     return decorator

@@ -1,11 +1,13 @@
 """JavaScript/TypeScript Hallucination Analyzer."""
 import re
-from typing import List, Dict
+from typing import List
+
 from ai_trust_validator.models import Issue
+
 
 class JSHallucinationAnalyzer:
     base_score = 100
-    
+
     HALLUCINATED_PACKAGES = {
         'node-fetch-common': ('critical', 'node-fetch or undici'),
         'lodash-helpers': ('critical', 'lodash'),
@@ -13,7 +15,7 @@ class JSHallucinationAnalyzer:
         'moment-plus': ('critical', 'moment or dayjs'),
         'javascript-utils': ('high', 'Native JS or lodash'),
     }
-    
+
     HALLUCINATED_FUNCTIONS = {
         'quickSort': ('high', 'array.sort(compareFn)'),
         'unique': ('high', '[...new Set(array)]'),
@@ -24,7 +26,7 @@ class JSHallucinationAnalyzer:
         'fetch.get': ('high', 'fetch(url)'),
         'fetch.post': ('high', 'fetch(url, { method: "POST" })'),
     }
-    
+
     def analyze(self, code: str, lines: List[str]) -> List[Issue]:
         issues = []
         # Check imports
@@ -36,7 +38,7 @@ class JSHallucinationAnalyzer:
                 if pkg in self.HALLUCINATED_PACKAGES:
                     sev, alt = self.HALLUCINATED_PACKAGES[pkg]
                     issues.append(Issue(severity=sev, category="hallucination", message=f"Package '{pkg}' likely doesn't exist", line=i, suggestion=f"Use '{alt}' instead"))
-        
+
         # Check function calls
         for func, (sev, alt) in self.HALLUCINATED_FUNCTIONS.items():
             pattern = re.compile(rf'\.{re.escape(func.split(".")[-1])}\s*\(')
@@ -44,7 +46,7 @@ class JSHallucinationAnalyzer:
                 if pattern.search(line):
                     issues.append(Issue(severity=sev, category="hallucination", message=f"Method '{func}()' may not exist", line=i, suggestion=f"Use {alt}"))
         return issues
-    
+
     def check_api_endpoints(self, code: str, lines: List[str]) -> List[Issue]:
         issues = []
         patterns = [

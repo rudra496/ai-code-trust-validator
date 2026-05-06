@@ -1,6 +1,7 @@
 """Tests for Best Practices Analyzer."""
 
 import pytest
+
 from ai_trust_validator.analyzers.best_practices import BestPracticesAnalyzer
 from ai_trust_validator.config import Config
 

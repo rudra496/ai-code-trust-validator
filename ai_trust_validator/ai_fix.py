@@ -1,9 +1,14 @@
 """AI-Powered Auto-Fix Module with LLM integration."""
-import os, json, re, urllib.request, urllib.error
-from typing import List, Optional, Dict, Any
+import json
+import os
+import re
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
-from abc import ABC, abstractmethod
-from ai_trust_validator.models import Issue, ValidationResult
+from typing import List, Optional
+
+from ai_trust_validator.models import Issue
+
 
 @dataclass
 class FixResult:
@@ -16,7 +21,7 @@ class FixResult:
     provider: str = ""
     model: str = ""
 
-@dataclass  
+@dataclass
 class LLMConfig:
     provider: str = "openai"
     model: str = "gpt-4o-mini"
@@ -25,7 +30,7 @@ class LLMConfig:
     max_tokens: int = 2000
     temperature: float = 0.3
     timeout: int = 30
-    
+
     @classmethod
     def from_env(cls) -> 'LLMConfig':
         if os.environ.get("OPENAI_API_KEY"):
@@ -56,22 +61,22 @@ Return the fixed code followed by a brief explanation. Format:
 
 EXPLANATION:
 [brief explanation]"""
-    
+
     def __init__(self, config: Optional[LLMConfig] = None):
         self.config = config or LLMConfig.from_env()
-    
+
     def is_available(self) -> bool:
         return bool(self.config.api_key) or self.config.provider == "ollama"
-    
+
     def fix(self, code: str, issues: List[Issue], language: str = "python", fix_type: str = "general") -> FixResult:
         if not self.is_available():
             return FixResult(success=False, original_code=code, fixed_code=code, explanation="AI fixing not available. Configure OPENAI_API_KEY, ANTHROPIC_API_KEY, or Ollama.", confidence=0.0, provider="none")
         if not issues:
             return FixResult(success=True, original_code=code, fixed_code=code, explanation="No issues to fix.", confidence=1.0, provider=self.config.provider, model=self.config.model)
-        
+
         issues_text = "\n".join(f"{i}. [{iss.severity.upper()}] Line {iss.line}: {iss.message}" + (f"\n   Suggestion: {iss.suggestion}" if iss.suggestion else "") for i, iss in enumerate(issues, 1))
         prompt = self.FIX_PROMPT.format(issues=issues_text, code=code, language=language)
-        
+
         try:
             response = self._call_llm(prompt)
             fixed_code, explanation = self._parse_response(response, language)
@@ -79,7 +84,7 @@ EXPLANATION:
             return FixResult(success=True, original_code=code, fixed_code=fixed_code, explanation=explanation, confidence=confidence, provider=self.config.provider, model=self.config.model)
         except Exception as e:
             return FixResult(success=False, original_code=code, fixed_code=code, explanation=f"AI fix failed: {str(e)}", confidence=0.0)
-    
+
     def _call_llm(self, prompt: str) -> str:
         if self.config.provider == "openai":
             url = self.config.base_url or "https://api.openai.com/v1/chat/completions"
@@ -95,7 +100,7 @@ EXPLANATION:
             req = urllib.request.Request(url, data=json.dumps(data).encode(), headers={"Content-Type": "application/json"})
         else:
             raise ValueError(f"Unknown provider: {self.config.provider}")
-        
+
         with urllib.request.urlopen(req, timeout=self.config.timeout) as resp:
             result = json.loads(resp.read().decode())
             if self.config.provider == "anthropic":
@@ -103,7 +108,7 @@ EXPLANATION:
             elif self.config.provider == "ollama":
                 return result['response']
             return result['choices'][0]['message']['content']
-    
+
     def _parse_response(self, response: str, language: str) -> tuple:
         match = re.compile(rf'```(?:{language})?\s*\n(.*?)\n```', re.DOTALL).search(response)
         if match:

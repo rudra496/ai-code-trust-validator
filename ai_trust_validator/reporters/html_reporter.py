@@ -3,6 +3,7 @@ HTML Reporter - Generate beautiful HTML reports for sharing.
 """
 
 from typing import List
+
 from ai_trust_validator.models import ValidationResult
 
 
@@ -12,7 +13,7 @@ class HTMLReporter:
     def generate(self, results: List[ValidationResult], title: str = "AI Code Trust Report") -> str:
         """Generate HTML report."""
         summary = self._generate_summary(results)
-        
+
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,7 +136,7 @@ class HTMLReporter:
     def _generate_summary(self, results: List[ValidationResult]) -> dict:
         if not results:
             return {"average_score": 0, "total_files": 0, "passed": 0, "failed": 0, "critical_issues": 0}
-        
+
         return {
             "average_score": round(sum(r.trust_score for r in results) / len(results), 1),
             "total_files": len(results),
@@ -161,12 +162,12 @@ class HTMLReporter:
     def _generate_issues_html(self, issues) -> str:
         if not issues:
             return "<p style='color: #00ff88;'>✅ No issues found</p>"
-        
+
         html = ""
         for issue in issues:
             line_info = f"<span class='line-num'>Line {issue.line}</span> — " if issue.line else ""
             suggestion = f"<div class='suggestion'>💡 {issue.suggestion}</div>" if issue.suggestion else ""
-            
+
             html += f"""
             <div class="issue issue-{issue.severity}">
                 <span class="severity severity-{issue.severity}">{issue.severity}</span>
