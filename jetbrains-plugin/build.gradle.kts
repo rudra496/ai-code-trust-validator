@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.22"
-    id("org.jetbrains.intellij") version "1.16.1"
+    id("org.jetbrains.intellij") version "1.17.4"
 }
 group = "com.aitrustvalidator"
 version = "0.4.0"
