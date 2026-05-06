@@ -12,6 +12,7 @@ Commands:
     aitrust analyze-deps <path> - Multi-file dependency analysis
     aitrust cache               - Manage cache
 """
+from __future__ import annotations
 
 import sys
 from pathlib import Path

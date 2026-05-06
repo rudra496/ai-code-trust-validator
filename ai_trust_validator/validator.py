@@ -3,6 +3,7 @@ Core Validator Module
 
 Main validation engine that orchestrates all analyzers and produces trust scores.
 """
+from __future__ import annotations
 
 import ast
 from pathlib import Path

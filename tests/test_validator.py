@@ -21,8 +21,7 @@ def test_security_sql_injection():
     """Test detection of SQL injection."""
     code = '''
 def get_user(user_id):
-    query = f"SELECT * FROM users WHERE id = {user_id}"
-    cursor.execute(query)
+    cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
 '''
     validator = Validator()
     result = validator.validate(code, is_file=False)

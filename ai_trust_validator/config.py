@@ -3,6 +3,7 @@ Configuration module for AI Trust Validator.
 
 Supports loading from .aitrust.yaml files with sensible defaults.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path

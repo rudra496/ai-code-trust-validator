@@ -208,7 +208,7 @@ class LogicAnalyzer(BaseAnalyzer):
                             suggestion="Implement the function or mark as abstract"
                         ))
                     elif isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
-                        if str(body[0].value.value) == "...":
+                        if body[0].value.value is Ellipsis or str(body[0].value.value) == "...":
                             issues.append(Issue(
                                 severity="medium",
                                 category="logic",

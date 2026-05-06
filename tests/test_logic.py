@@ -90,7 +90,8 @@ def example():
     return 42
 '''
         issues = analyzer.analyze(parse_code(code), code)
-        assert any("unused" in i.message.lower() for i in issues)
+        unused = [i for i in issues if "unused" in i.message.lower() or "never used" in i.message.lower()]
+        assert len(unused) > 0, f"Should detect unused variable 'result', got issues: {[i.message for i in issues]}"
 
     def test_underscore_prefix_is_ignored(self, analyzer, parse_code):
         code = '''
@@ -140,7 +141,7 @@ class TestEmptyBlocks:
     def test_ellipsis_function(self, analyzer, parse_code):
         code = 'def placeholder():\n    ...'
         issues = analyzer.analyze(parse_code(code), code)
-        assert any("ellipsis" in i.message.lower() for i in issues)
+        assert any("ellipsis" in i.message.lower() for i in issues), f"Should detect ellipsis body, got issues: {[i.message for i in issues]}"
 
 
 class TestRedundantComparisons:

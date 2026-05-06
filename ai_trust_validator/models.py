@@ -1,7 +1,8 @@
 """Data models for validation results."""
+from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Dict, List, Optional
 
 
 @dataclass
@@ -20,7 +21,7 @@ class CategoryScore:
     """Score breakdown for a single category."""
     score: int
     weight: float
-    issues: list[Issue] = field(default_factory=list)
+    issues: List[Issue] = field(default_factory=list)
 
     def weighted_score(self) -> float:
         return self.score * self.weight
@@ -31,15 +32,15 @@ class ValidationResult:
     """Complete validation result with scores and issues."""
     file_path: Optional[str]
     trust_score: int
-    categories: dict[str, CategoryScore]
-    all_issues: list[Issue] = field(default_factory=list)
+    categories: Dict[str, CategoryScore]
+    all_issues: List[Issue] = field(default_factory=list)
 
     @property
-    def critical_issues(self) -> list[Issue]:
+    def critical_issues(self) -> List[Issue]:
         return [i for i in self.all_issues if i.severity == "critical"]
 
     @property
-    def high_issues(self) -> list[Issue]:
+    def high_issues(self) -> List[Issue]:
         return [i for i in self.all_issues if i.severity == "high"]
 
     @property
