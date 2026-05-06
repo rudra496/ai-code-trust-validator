@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Trust Validator — Docs</title>
+    <meta name="description" content="AI-powered code trust validator. Detect security flaws, hallucinations & logic errors in AI-generated code.">
+    <meta property="og:title" content="AI Code Trust Validator">
+    <meta property="og:description" content="Trust your AI-generated code before shipping to production.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rudra496.github.io/ai-code-trust-validator/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Code Trust Validator">
+    <meta name="twitter:description" content="Detect security flaws, hallucinations & logic errors in AI-generated code.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #0c4a6e 100%);
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 16px; }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { border: 2px solid var(--border); color: var(--text); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 60px 0; }
+        .section h2 { font-size: 2rem; margin-bottom: 32px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: border-color 0.2s;
+        }
+        .card:hover { border-color: var(--primary); }
+        .card h3 { margin-bottom: 12px; font-size: 1.1rem; }
+        .card p { color: var(--text-muted); font-size: 0.95rem; }
+        .install-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .install-box code {
+            display: block;
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: var(--green);
+            user-select: all;
+        }
+        .features-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        .features-table th, .features-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .features-table th { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+        .tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+        .tag-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .stats-row { gap: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>🛡️ AI Code Trust Validator</h1>
+    <p>Trust your AI-generated code before shipping to production. The complete quality gate for AI-assisted development.</p>
+    <div class="hero-buttons">
+        <a href="https://github.com/rudra496/ai-code-trust-validator" class="btn btn-primary">GitHub</a>
+        <a href="https://github.com/rudra496/ai-code-trust-validator#-installation" class="btn btn-outline">Get Started</a>
+        <a href="https://github.com/rudra496/ai-code-trust-validator/releases" class="btn btn-outline">Releases</a>
+    </div>
+    <div class="stats-row">
+        <div class="stat">
+            <div class="stat-value">4</div>
+            <div class="stat-label">Analysis Types</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Languages</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">5ms</div>
+            <div class="stat-label">Avg Validation</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">4</div>
+            <div class="stat-label">IDE Plugins</div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section">
+        <h2>Why AI Code Trust Validator?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🔒 Security Scanning</h3>
+                <p>Detect SQL injection, hardcoded secrets, command injection, XSS, and more in AI-generated code.</p>
+            </div>
+            <div class="card">
+                <h3>🎭 Hallucination Detection</h3>
+                <p>Catch fake imports, invented functions, imaginary APIs, and hallucinated packages before they break production.</p>
+            </div>
+            <div class="card">
+                <h3>🐛 Logic Validation</h3>
+                <p>Find unreachable code, infinite loops, dead branches, and other logic errors that AI commonly introduces.</p>
+            </div>
+            <div class="card">
+                <h3>🤖 AI Auto-Fix</h3>
+                <p>LLM-powered fixes using OpenAI, Anthropic, or Ollama. One-command fix with confidence scores.</p>
+            </div>
+            <div class="card">
+                <h3>💻 IDE Integration</h3>
+                <p>VS Code extension, JetBrains plugin, and LSP server for real-time validation in your editor.</p>
+            </div>
+            <div class="card">
+                <h3>📊 Rich Reports</h3>
+                <p>JSON, HTML dashboard, SARIF (GitHub Security tab), and PDF reports with detailed findings.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Quick Install</h2>
+        <div class="install-box">
+            <p>Install from PyPI</p>
+            <code>pip install ai-trust-validator</code>
+            <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
+                Also available as <a href="https://github.com/rudra496/ai-code-trust-validator/pkgs/container/ai-code-trust-validator" style="color: var(--primary);">Docker image</a> and
+                <a href="https://github.com/rudra496/ai-code-trust-validator" style="color: var(--primary);">GitHub Action</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>How It Compares</h2>
+        <table class="features-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>AI Trust Validator</th>
+                    <th>Semgrep</th>
+                    <th>SonarQube</th>
+                    <th>CodeQL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AI Hallucination Detection</td>
+                    <td><span class="tag tag-green">Built-in</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                </tr>
+                <tr>
+                    <td>AI Auto-Fix</td>
+                    <td><span class="tag tag-green">Built-in</span></td>
+                    <td><span class="tag tag-yellow">Limited</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                </tr>
+                <tr>
+                    <td>Trust Score</td>
+                    <td><span class="tag tag-green">0-100</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-yellow">Quality Gate</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                </tr>
+                <tr>
+                    <td>Multi-LLM Support</td>
+                    <td><span class="tag tag-green">4 providers</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                    <td><span class="tag tag-red">No</span></td>
+                </tr>
+                <tr>
+                    <td>IDE Plugins</td>
+                    <td><span class="tag tag-green">VS Code + JetBrains</span></td>
+                    <td><span class="tag tag-green">VS Code</span></td>
+                    <td><span class="tag tag-green">All IDEs</span></td>
+                    <td><span class="tag tag-green">VS Code</span></td>
+                </tr>
+                <tr>
+                    <td>Open Source</td>
+                    <td><span class="tag tag-green">MIT</span></td>
+                    <td><span class="tag tag-green">LGPL</span></td>
+                    <td><span class="tag tag-yellow">Community only</span></td>
+                    <td><span class="tag tag-yellow">Limited</span></td>
+                </tr>
+                <tr>
+                    <td>Self-Hosted</td>
+                    <td><span class="tag tag-green">Yes</span></td>
+                    <td><span class="tag tag-green">Yes</span></td>
+                    <td><span class="tag tag-green">Yes</span></td>
+                    <td><span class="tag tag-yellow">Limited</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Open Source & Community</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>⭐ Star on GitHub</h3>
+                <p>Help others discover AI Code Trust Validator. Every star helps the project grow.</p>
+                <a href="https://github.com/rudra496/ai-code-trust-validator" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">Star the Repo</a>
+            </div>
+            <div class="card">
+                <h3>🤝 Contribute</h3>
+                <p>Beginner-friendly issues available. Check the "good first issue" label to get started.</p>
+                <a href="https://github.com/rudra496/ai-code-trust-validator/issues" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">View Issues</a>
+            </div>
+            <div class="card">
+                <h3>💬 Discussions</h3>
+                <p>Ask questions, share ideas, and connect with other users in GitHub Discussions.</p>
+                <a href="https://github.com/rudra496/ai-code-trust-validator/discussions" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">Join Discussions</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>
+        <strong>AI Code Trust Validator</strong> — MIT License<br>
+        Built by <a href="https://rudra496.github.io/site">Rudra Sarker</a> &middot;
+        <a href="https://github.com/rudra496/ai-code-trust-validator">GitHub</a> &middot;
+        <a href="https://github.com/rudra496/ai-code-trust-validator/issues">Issues</a> &middot;
+        <a href="https://github.com/rudra496/ai-code-trust-validator/blob/main/CONTRIBUTING.md">Contributing</a>
+    </p>
+</footer>
+
+</body>
+</html>

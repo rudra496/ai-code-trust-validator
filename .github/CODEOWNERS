@@ -1,0 +1,32 @@
+# CODEOWNERS — these users will be auto-requested for review on PRs
+
+# Default owner for everything
+* @rudra496
+
+# Core validation engine
+/ai_trust_validator/ @rudra496
+
+# CLI
+/ai_trust_validator/cli.py @rudra496
+
+# Analyzers
+/ai_trust_validator/analyzers/ @rudra496
+
+# Tests
+/tests/ @rudra496
+
+# VS Code extension
+/vscode-extension/ @rudra496
+
+# JetBrains plugin
+/jetbrains-plugin/ @rudra496
+
+# Dashboard
+/dashboard/ @rudra496
+
+# CI/CD
+/.github/workflows/ @rudra496
+
+# Documentation
+/docs/ @rudra496
+/README.md @rudra496

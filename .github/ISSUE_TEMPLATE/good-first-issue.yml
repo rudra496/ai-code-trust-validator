@@ -1,0 +1,36 @@
+name: Good First Issue Proposal
+description: Propose a beginner-friendly issue for new contributors
+labels: ["good first issue"]
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What should be done?
+      description: Describe the task in detail. Good first issues should be well-scoped and have clear acceptance criteria.
+      placeholder: "Add support for validating YAML configuration files..."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: What does "done" look like?
+      placeholder: "- [ ] YAML files are recognized and validated\n- [ ] Tests added\n- [ ] Docs updated"
+    validations:
+      required: true
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      description: How hard is this task?
+      options:
+        - Beginner
+        - Intermediate
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: hints
+    attributes:
+      label: Hints for contributors
+      description: Any pointers on where to start (files to look at, patterns to follow)?
