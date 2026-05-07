@@ -15,4 +15,4 @@ kotlin { jvmToolchain(17) }
 tasks {
     patchPluginXml { sinceBuild.set("232"); untilBuild.set("241.*") }
 }
-dependencies { implementation("com.google.code.gson:gson:2.10.1") }
+dependencies { implementation("com.google.code.gson:gson:2.14.0") }
