@@ -3,18 +3,22 @@ Configuration module for AI Trust Validator.
 
 Supports loading from .aitrust.yaml files with sensible defaults.
 """
+
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
 import yaml
+from jsonschema import validate, ValidationError
 
 
 @dataclass
 class CheckConfig:
     """Configuration for a single check type."""
+
     enabled: bool = True
     weight: float = 1.0
 
@@ -22,6 +26,7 @@ class CheckConfig:
 @dataclass
 class ChecksConfig:
     """Configuration for all check types."""
+
     security: CheckConfig = field(default_factory=lambda: CheckConfig(weight=2.0))
     hallucinations: CheckConfig = field(default_factory=lambda: CheckConfig(weight=2.5))
     logic: CheckConfig = field(default_factory=lambda: CheckConfig(weight=1.0))
@@ -32,9 +37,10 @@ class ChecksConfig:
 class Config:
     """
     Main configuration class.
-    
+
     Loads from .aitrust.yaml if present, otherwise uses defaults.
     """
+
     min_score: int = 70
     strict_mode: bool = False
     checks: ChecksConfig = field(default_factory=ChecksConfig)
@@ -50,16 +56,32 @@ class Config:
         with open(path, encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
 
+        schema_path = Path(__file__).parent / "schemas" / "config.schema.json"
+        if schema_path.exists():
+            with open(schema_path, encoding="utf-8") as schema_file:
+                schema = json.load(schema_file)
+
+            try:
+                validate(instance=data, schema=schema)
+            except ValidationError as e:
+                error_path = ".".join(str(p) for p in e.path)
+                if error_path:
+                    raise ValueError(
+                        f"Invalid configuration in .aitrust.yaml at '{error_path}': {e.message}"
+                    )
+                else:
+                    raise ValueError(f"Invalid configuration in .aitrust.yaml: {e.message}")
+
         return cls._from_dict(data)
 
     @classmethod
     def find_and_load(cls, start_dir: Optional[str | Path] = None) -> "Config":
         """
         Find .aitrust.yaml starting from start_dir and walking up.
-        
+
         Args:
             start_dir: Directory to start searching from (default: cwd)
-            
+
         Returns:
             Config loaded from found file, or default config
         """
@@ -91,13 +113,13 @@ class Config:
                     name,
                     CheckConfig(
                         enabled=check_data.get("enabled", True),
-                        weight=check_data.get("weight", 1.0)
-                    )
+                        weight=check_data.get("weight", 1.0),
+                    ),
                 )
 
         return cls(
             min_score=data.get("min_score", 70),
             strict_mode=data.get("strict_mode", False),
             checks=checks,
-            ignore=data.get("ignore", [])
+            ignore=data.get("ignore", []),
         )
