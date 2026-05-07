@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "min_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "strict_mode": {
+      "type": "boolean"
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "security": { "$ref": "#/definitions/check_config" },
+        "hallucinations": { "$ref": "#/definitions/check_config" },
+        "logic": { "$ref": "#/definitions/check_config" },
+        "best_practices": { "$ref": "#/definitions/check_config" }
+      },
+      "additionalProperties": false
+    },
+    "ai": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["openai", "anthropic", "ollama"]
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ignore": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "check_config": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "weight": { "type": "number" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
