@@ -3,16 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Code Trust Validator — Docs</title>
-    <meta name="description" content="AI-powered code trust validator. Detect security flaws, hallucinations & logic errors in AI-generated code.">
-    <meta property="og:title" content="AI Code Trust Validator">
-    <meta property="og:description" content="Trust your AI-generated code before shipping to production.">
+    <title>AI Code Trust Validator — AI Code Security Scanner & Vulnerability Detector</title>
+    <meta name="description" content="Free open-source AI code security scanner. Detect security vulnerabilities, backdoors, hallucinated APIs, and logic errors in AI-generated Python, JavaScript, and TypeScript code. Install with pip.">
+    <meta name="keywords" content="AI code validator, AI code security scanner, AI code review tool, detect AI code vulnerabilities, AI hallucination detector, ChatGPT code checker, GitHub Copilot code validator, AI code analysis, static analysis tool, LLM code security, Python security linter, JavaScript security scanner, AI-generated code checker, code trust score">
+    <meta name="author" content="Rudra Sarker">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rudra496.github.io/ai-code-trust-validator/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI Code Trust Validator — Security Scanner for AI-Generated Code">
+    <meta property="og:description" content="Free open-source tool that scans AI-generated code for security vulnerabilities, backdoors, hallucinated imports, and logic errors. Supports Python, JavaScript, TypeScript.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rudra496.github.io/ai-code-trust-validator/">
+    <meta property="og:site_name" content="AI Code Trust Validator">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI Code Trust Validator">
-    <meta name="twitter:description" content="Detect security flaws, hallucinations & logic errors in AI-generated code.">
+    <meta name="twitter:title" content="AI Code Trust Validator — Security Scanner for AI-Generated Code">
+    <meta name="twitter:description" content="Free open-source tool that scans AI-generated code for security vulnerabilities, backdoors, hallucinated imports, and logic errors.">
+    <meta name="twitter:creator" content="@rudra496">
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "AI Code Trust Validator",
+        "description": "Free open-source AI code security scanner that detects vulnerabilities, backdoors, hallucinated APIs, and logic errors in AI-generated Python, JavaScript, and TypeScript code.",
+        "url": "https://rudra496.github.io/ai-code-trust-validator/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows, macOS, Linux",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Rudra Sarker",
+            "url": "https://github.com/rudra496"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "codeRepository": "https://github.com/rudra496/ai-code-trust-validator",
+        "programmingLanguage": "Python",
+        "featureList": [
+            "Security vulnerability scanning",
+            "AI hallucination detection",
+            "Logic error detection",
+            "AI-powered auto-fix",
+            "VS Code extension",
+            "JetBrains plugin",
+            "GitHub Action",
+            "Docker support",
+            "REST API server",
+            "Multi-language support (Python, JavaScript, TypeScript)"
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Validate AI-Generated Code for Security Vulnerabilities",
+        "description": "Step-by-step guide to scan AI-generated code for security issues using AI Code Trust Validator.",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Install",
+                "text": "Install AI Code Trust Validator from PyPI using: pip install ai-trust-validator"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Scan your code",
+                "text": "Run aitrust validate your_file.py to scan for security vulnerabilities, hallucinations, and logic errors."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Review results",
+                "text": "Review the trust score and detailed findings. Fix critical issues before deploying."
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is AI Code Trust Validator?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "AI Code Trust Validator is a free open-source security tool that analyzes AI-generated code for vulnerabilities, backdoors, hallucinated imports, and logic errors. It supports Python, JavaScript, and TypeScript."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I check AI-generated code for security issues?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Install with pip install ai-trust-validator, then run aitrust validate your_file.py to get a trust score and detailed vulnerability report."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is AI Code Trust Validator free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, AI Code Trust Validator is free and open-source under the MIT license."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What programming languages does AI Code Trust Validator support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "AI Code Trust Validator supports Python, JavaScript, and TypeScript code analysis."
+                }
+            }
+        ]
+    }
+    </script>
+
     <style>
         :root {
             --primary: #6366f1;
@@ -124,6 +240,9 @@
         .stat { text-align: center; }
         .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
         .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+        .faq-item { margin-bottom: 24px; }
+        .faq-item h3 { color: var(--primary); margin-bottom: 8px; }
+        .faq-item p { color: var(--text-muted); }
         @media (max-width: 640px) {
             .hero h1 { font-size: 2rem; }
             .hero p { font-size: 1rem; }
@@ -134,8 +253,8 @@
 <body>
 
 <div class="hero">
-    <h1>🛡️ AI Code Trust Validator</h1>
-    <p>Trust your AI-generated code before shipping to production. The complete quality gate for AI-assisted development.</p>
+    <h1>AI Code Trust Validator</h1>
+    <p>Free open-source security scanner for AI-generated code. Detect vulnerabilities, backdoors, hallucinated APIs, and logic errors before shipping to production.</p>
     <div class="hero-buttons">
         <a href="https://github.com/rudra496/ai-code-trust-validator" class="btn btn-primary">GitHub</a>
         <a href="https://github.com/rudra496/ai-code-trust-validator#-installation" class="btn btn-outline">Get Started</a>
@@ -163,49 +282,50 @@
 
 <div class="container">
     <div class="section">
-        <h2>Why AI Code Trust Validator?</h2>
+        <h2>Scan AI-Generated Code for Security Vulnerabilities</h2>
         <div class="grid">
             <div class="card">
-                <h3>🔒 Security Scanning</h3>
-                <p>Detect SQL injection, hardcoded secrets, command injection, XSS, and more in AI-generated code.</p>
+                <h3>Security Vulnerability Scanner</h3>
+                <p>Detect SQL injection, hardcoded secrets, command injection, XSS, and other security vulnerabilities in AI-generated code.</p>
             </div>
             <div class="card">
-                <h3>🎭 Hallucination Detection</h3>
+                <h3>AI Hallucination Detector</h3>
                 <p>Catch fake imports, invented functions, imaginary APIs, and hallucinated packages before they break production.</p>
             </div>
             <div class="card">
-                <h3>🐛 Logic Validation</h3>
+                <h3>Logic Error Validator</h3>
                 <p>Find unreachable code, infinite loops, dead branches, and other logic errors that AI commonly introduces.</p>
             </div>
             <div class="card">
-                <h3>🤖 AI Auto-Fix</h3>
-                <p>LLM-powered fixes using OpenAI, Anthropic, or Ollama. One-command fix with confidence scores.</p>
+                <h3>AI-Powered Auto-Fix</h3>
+                <p>LLM-powered code fixes using OpenAI, Anthropic, or Ollama. One-command fix with confidence scores.</p>
             </div>
             <div class="card">
-                <h3>💻 IDE Integration</h3>
+                <h3>IDE Integration</h3>
                 <p>VS Code extension, JetBrains plugin, and LSP server for real-time validation in your editor.</p>
             </div>
             <div class="card">
-                <h3>📊 Rich Reports</h3>
-                <p>JSON, HTML dashboard, SARIF (GitHub Security tab), and PDF reports with detailed findings.</p>
+                <h3>Detailed Reports</h3>
+                <p>JSON, HTML dashboard, SARIF for GitHub Security tab, and PDF reports with detailed findings.</p>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <h2>Quick Install</h2>
+        <h2>Install AI Code Trust Validator</h2>
         <div class="install-box">
             <p>Install from PyPI</p>
             <code>pip install ai-trust-validator</code>
             <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
-                Also available as <a href="https://github.com/rudra496/ai-code-trust-validator/pkgs/container/ai-code-trust-validator" style="color: var(--primary);">Docker image</a> and
-                <a href="https://github.com/rudra496/ai-code-trust-validator" style="color: var(--primary);">GitHub Action</a>
+                Also available as <a href="https://github.com/rudra496/ai-code-trust-validator/pkgs/container/ai-code-trust-validator" style="color: var(--primary);">Docker image</a>,
+                <a href="https://github.com/rudra496/ai-code-trust-validator" style="color: var(--primary);">GitHub Action</a>, and
+                <a href="https://github.com/rudra496/ai-code-trust-validator" style="color: var(--primary);">pre-commit hook</a>
             </p>
         </div>
     </div>
 
     <div class="section">
-        <h2>How It Compares</h2>
+        <h2>Compare AI Code Security Tools</h2>
         <table class="features-table">
             <thead>
                 <tr>
@@ -271,20 +391,50 @@
     </div>
 
     <div class="section">
-        <h2>Open Source & Community</h2>
+        <h2>Frequently Asked Questions</h2>
+        <div class="grid">
+            <div class="faq-item">
+                <h3>What is AI Code Trust Validator?</h3>
+                <p>AI Code Trust Validator is a free open-source security tool that analyzes AI-generated code for vulnerabilities, backdoors, hallucinated imports, and logic errors. It supports Python, JavaScript, and TypeScript.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How do I check AI-generated code for security issues?</h3>
+                <p>Install with <code>pip install ai-trust-validator</code>, then run <code>aitrust validate your_file.py</code> to get a trust score and detailed vulnerability report.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is AI Code Trust Validator free?</h3>
+                <p>Yes. AI Code Trust Validator is free and open-source under the MIT license. No usage limits, no API keys required for basic scanning.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What languages are supported?</h3>
+                <p>AI Code Trust Validator currently supports security scanning for Python, JavaScript, and TypeScript code analysis.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does it work with ChatGPT and GitHub Copilot code?</h3>
+                <p>Yes. AI Code Trust Validator scans any AI-generated code regardless of which AI tool produced it, including ChatGPT, GitHub Copilot, Claude, Gemini, and others.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I use it in my CI/CD pipeline?</h3>
+                <p>Yes. Use the <a href="https://github.com/rudra496/ai-code-trust-validator" style="color: var(--primary);">GitHub Action</a>, Docker image, or pre-commit hook to integrate security scanning into your CI/CD workflow.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Open Source and Community</h2>
         <div class="grid">
             <div class="card">
-                <h3>⭐ Star on GitHub</h3>
+                <h3>Star on GitHub</h3>
                 <p>Help others discover AI Code Trust Validator. Every star helps the project grow.</p>
                 <a href="https://github.com/rudra496/ai-code-trust-validator" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">Star the Repo</a>
             </div>
             <div class="card">
-                <h3>🤝 Contribute</h3>
+                <h3>Contribute</h3>
                 <p>Beginner-friendly issues available. Check the "good first issue" label to get started.</p>
                 <a href="https://github.com/rudra496/ai-code-trust-validator/issues" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">View Issues</a>
             </div>
             <div class="card">
-                <h3>💬 Discussions</h3>
+                <h3>Discussions</h3>
                 <p>Ask questions, share ideas, and connect with other users in GitHub Discussions.</p>
                 <a href="https://github.com/rudra496/ai-code-trust-validator/discussions" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">Join Discussions</a>
             </div>
@@ -294,11 +444,12 @@
 
 <footer>
     <p>
-        <strong>AI Code Trust Validator</strong> — MIT License<br>
+        <strong>AI Code Trust Validator</strong> — Free Open-Source AI Code Security Scanner — MIT License<br>
         Built by <a href="https://rudra496.github.io/site">Rudra Sarker</a> &middot;
         <a href="https://github.com/rudra496/ai-code-trust-validator">GitHub</a> &middot;
         <a href="https://github.com/rudra496/ai-code-trust-validator/issues">Issues</a> &middot;
-        <a href="https://github.com/rudra496/ai-code-trust-validator/blob/main/CONTRIBUTING.md">Contributing</a>
+        <a href="https://github.com/rudra496/ai-code-trust-validator/blob/main/CONTRIBUTING.md">Contributing</a> &middot;
+        <a href="https://pypi.org/project/ai-trust-validator/">PyPI</a>
     </p>
 </footer>
 
