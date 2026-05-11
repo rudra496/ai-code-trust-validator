@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rudra496.github.io/ai-code-trust-validator/sitemap.xml
