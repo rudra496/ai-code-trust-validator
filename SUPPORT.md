@@ -1,0 +1,26 @@
+# Support — AI Code Trust Validator
+
+## Quick Help
+
+- **Documentation:** Check the [docs/](docs/) folder
+- **Issues:** [Open an Issue](https://github.com/rudra496/ai-code-trust-validator/issues/new/choose)
+- **Discussions:** [GitHub Discussions](https://github.com/rudra496/ai-code-trust-validator/discussions)
+
+## Community
+
+- **Dev.to:** [dev.to/rudra_sarker](https://dev.to/rudra_sarker)
+- **X / Twitter:** [@Rudra496](https://x.com/Rudra496)
+
+## Reporting Bugs
+
+1. Search [existing issues](https://github.com/rudra496/ai-code-trust-validator/issues)
+2. Open a [bug report](https://github.com/rudra496/ai-code-trust-validator/issues/new?template=bug_report.md)
+
+## Security Concerns
+
+See [SECURITY.md](SECURITY.md) for responsible disclosure.
+
+## Contact
+
+- **GitHub:** [rudra496](https://github.com/rudra496)
+- **LinkedIn:** [rudrasarker](https://www.linkedin.com/in/rudrasarker)
