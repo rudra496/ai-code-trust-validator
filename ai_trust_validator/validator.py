@@ -58,9 +58,12 @@ class Validator:
             ValidationResult with trust score and issues
         """
         if is_file:
-            target_path = Path(source).resolve()
-            file_path = str(target_path)
-            code = target_path.read_text(encoding="utf-8")
+            path_str = os.path.abspath(os.path.normpath(str(source)))
+            safe_path = Path(path_str)
+            if not safe_path.is_file():
+                raise ValueError(f"Invalid file path: {source}")
+            file_path = str(safe_path)
+            code = safe_path.read_text(encoding="utf-8")
         else:
             file_path = None
             code = str(source)
