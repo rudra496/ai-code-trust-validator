@@ -58,8 +58,9 @@ class Validator:
             ValidationResult with trust score and issues
         """
         if is_file:
-            file_path = str(source)
-            code = Path(source).read_text(encoding="utf-8")
+            target_path = Path(source).resolve()
+            file_path = str(target_path)
+            code = target_path.read_text(encoding="utf-8")
         else:
             file_path = None
             code = str(source)
