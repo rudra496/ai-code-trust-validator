@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use AI Code Trust Validator or reference its security scanning methodologies, please cite it as below."
+title: "AI Code Trust Validator: Security and Trustworthiness Auditing Engine for AI-Generated Code"
+authors:
+  - family-names: "Sarker"
+    given-names: "Rudra"
+    affiliation: "Shahjalal University of Science and Technology, Bangladesh"
+    orcid: "https://orcid.org/0009-0001-4545-0932"
+abstract: "AI Code Trust Validator is an open-source static application security testing (SAST) auditing engine designed to detect hallucinations, supply-chain vulnerabilities, API backdoors, and logic regressions in AI-generated Python, JavaScript, and TypeScript code."
+version: "0.5.1"
+date-released: "2026-08-26"
+license: "MIT"
+repository-code: "https://github.com/rudra496/ai-code-trust-validator"
+url: "https://rudra496.github.io/site"
+keywords:
+  - "ai-security"
+  - "sast"
+  - "code-auditing"
+  - "hallucination-detection"
+  - "cybersecurity"
+  - "open-source"
